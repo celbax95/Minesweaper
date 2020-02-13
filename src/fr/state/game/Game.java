@@ -18,7 +18,7 @@ public class Game {
 		int tileSize = 32;
 
 		this.board = new Board();
-		this.board.createBoard(new Point(0, 0), new Point(20, 20), tileSize, 20);
+		this.board.createBoard(new Point(0, 0), new Point(20, 20), tileSize, 60);
 	}
 
 	public void draw(Graphics2D g) {
