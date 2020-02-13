@@ -9,7 +9,6 @@ import java.awt.geom.AffineTransform;
 import fr.util.point.Point;
 
 public class InfoTile extends Tile {
-	private int bombsASide;
 
 	Font font;
 	private Point labelPos;
@@ -58,10 +57,5 @@ public class InfoTile extends Tile {
 		Point offset = this.size.clone().sub(labelSize).div(2);
 
 		this.labelPos = new Point(this.pos.x + offset.x, this.pos.y + this.size.y - labelSize.y + offset.y);
-	}
-
-	@Override
-	public void setNbBombsASide(int nb) {
-		this.bombsASide = nb;
 	}
 }

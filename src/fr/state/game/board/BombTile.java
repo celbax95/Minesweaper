@@ -29,10 +29,4 @@ public class BombTile extends Tile {
 	@Override
 	public void onCoveredChanged() {
 	}
-
-	@Override
-	public void setNbBombsASide(int nb) {
-		// Nothing to do
-	}
-
 }

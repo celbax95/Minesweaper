@@ -128,6 +128,26 @@ public class Board {
 		}
 	}
 
+	private int getFlagsAround(Tile tile) {
+		int x = tile.getTilePos().ix() - 1;
+		int y = tile.getTilePos().iy() - 1;
+
+		int flagCount = 0;
+
+		for (int ix = 0; ix < 3; ix++) {
+			for (int iy = 0; iy < 3; iy++) {
+				try {
+					if (this.tiles[x + ix][y + iy].isFlagged()) {
+						flagCount++;
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+
+		return flagCount;
+	}
+
 	/**
 	 * @return the pos
 	 */
@@ -147,6 +167,23 @@ public class Board {
 	 */
 	public boolean isInit() {
 		return this.init;
+	}
+
+	private void mouseActionOnTile(Tile tile, int mouse) {
+		if (tile.isCovered()) {
+			if (mouse == MouseEvent.LEFT_RELEASED) {
+				tile.setCovered(false);
+			} else if (mouse == MouseEvent.RIGHT_RELEASED) {
+				@SuppressWarnings("unused")
+				boolean flagged = tile.toggleFlag();
+			}
+		} else {
+			if (mouse == MouseEvent.MIDDLE_RELEASED) {
+				if (this.getFlagsAround(tile) == tile.getBombsASide()) {
+					this.uncoverAround(tile);
+				}
+			}
+		}
 	}
 
 	/**
@@ -171,9 +208,19 @@ public class Board {
 		}
 	}
 
-	private void uncoverTile(Tile tile, int mouse) {
-		if (mouse == MouseEvent.LEFT_RELEASED) {
-			tile.setCovered(false);
+	private void uncoverAround(Tile tile) {
+		int x = tile.getTilePos().ix() - 1;
+		int y = tile.getTilePos().iy() - 1;
+
+		for (int ix = 0; ix < 3; ix++) {
+			for (int iy = 0; iy < 3; iy++) {
+				try {
+					if (this.tiles[x + ix][y + iy].isCovered()) {
+						this.tiles[x + ix][y + iy].setCovered(false);
+					}
+				} catch (Exception e) {
+				}
+			}
 		}
 	}
 
@@ -195,7 +242,7 @@ public class Board {
 							}
 							testX = false;
 							if (tile.isYAligned(e.pos.iy())) {
-								this.uncoverTile(tile, e.id);
+								this.mouseActionOnTile(tile, e.id);
 								found = true;
 							}
 						}

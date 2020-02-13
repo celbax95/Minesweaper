@@ -8,11 +8,15 @@ import fr.util.point.Point;
 public abstract class Tile {
 	protected Board board;
 
+	protected int bombsASide;
+
 	protected Point pos;
 	protected Point size;
 	protected Point tilePos;
 
 	boolean covered;
+
+	boolean flagged;
 
 	/**
 	 * @param board
@@ -27,11 +31,17 @@ public abstract class Tile {
 		this.size = size;
 		this.tilePos = tilePos;
 		this.covered = true;
+		this.flagged = false;
 	}
 
 	protected void coveredDraw(Graphics2D g) {
 		g.setColor(new Color(100, 100, 100));
 		this.fillRect(g);
+		if (this.flagged) {
+			g.setColor(new Color(230, 0, 0));
+			g.fillOval(this.pos.ix() + this.size.ix() / 6, this.pos.iy() + this.size.iy() / 6,
+					this.size.ix() - this.size.ix() / 3, this.size.iy() - this.size.iy() / 3);
+		}
 	}
 
 	public abstract void draw(Graphics2D g);
@@ -45,6 +55,13 @@ public abstract class Tile {
 	 */
 	public Board getBoard() {
 		return this.board;
+	}
+
+	/**
+	 * @return the bombsASide
+	 */
+	public int getBombsASide() {
+		return this.bombsASide;
 	}
 
 	/**
@@ -77,6 +94,13 @@ public abstract class Tile {
 		return this.covered;
 	}
 
+	/**
+	 * @return the flagged
+	 */
+	public boolean isFlagged() {
+		return this.flagged;
+	}
+
 	public boolean isXAligned(int x) {
 		return x > this.pos.x && x < this.pos.x + this.size.x;
 	}
@@ -88,11 +112,18 @@ public abstract class Tile {
 	public abstract void onCoveredChanged();
 
 	public void setCovered(boolean covered) {
-		if (this.covered != covered) {
+		if (this.covered != covered && !this.flagged) {
 			this.covered = covered;
 			this.onCoveredChanged();
 		}
 	}
 
-	public abstract void setNbBombsASide(int nb);
+	public void setNbBombsASide(int nb) {
+		this.bombsASide = nb;
+	}
+
+	public boolean toggleFlag() {
+		this.flagged = !this.flagged;
+		return this.flagged;
+	}
 }
