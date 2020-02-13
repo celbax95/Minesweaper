@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 import fr.util.point.Point;
 
 public abstract class Tile {
-	private Board board;
+	protected Board board;
 
-	private Point pos;
-	private Point size;
-	private Point tilePos;
+	protected Point pos;
+	protected Point size;
+	protected Point tilePos;
 
 	boolean covered;
 
@@ -77,10 +77,21 @@ public abstract class Tile {
 		return this.covered;
 	}
 
+	public boolean isXAligned(int x) {
+		return x > this.pos.x && x < this.pos.x + this.size.x;
+	}
+
+	public boolean isYAligned(int y) {
+		return y > this.pos.y && y < this.pos.y + this.size.y;
+	}
+
 	public abstract void onCoveredChanged();
 
 	public void setCovered(boolean covered) {
-		this.covered = covered;
+		if (this.covered != covered) {
+			this.covered = covered;
+			this.onCoveredChanged();
+		}
 	}
 
 	public abstract void setNbBombsASide(int nb);

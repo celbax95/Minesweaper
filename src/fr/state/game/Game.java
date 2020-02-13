@@ -19,8 +19,6 @@ public class Game {
 
 		this.board = new Board();
 		this.board.createBoard(new Point(0, 0), new Point(20, 20), tileSize, 20);
-
-		this.board.uncover();
 	}
 
 	public void draw(Graphics2D g) {
@@ -38,5 +36,7 @@ public class Game {
 	}
 
 	public void update(Input input) {
+		this.board.update(input);
+
 	}
 }

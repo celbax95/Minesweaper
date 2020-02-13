@@ -3,6 +3,8 @@ package fr.state.game.board;
 import java.awt.Graphics2D;
 import java.util.Random;
 
+import fr.inputs.Input;
+import fr.inputs.mouse.MouseEvent;
 import fr.util.point.Point;
 
 public class Board {
@@ -84,6 +86,22 @@ public class Board {
 		this.init = false;
 	}
 
+	public void chainedUncover(Tile tile) {
+		int x = tile.getTilePos().ix() - 1;
+		int y = tile.getTilePos().iy() - 1;
+
+		for (int ix = 0; ix < 3; ix++) {
+			for (int iy = 0; iy < 3; iy++) {
+				try {
+					if (!this.tiles[x + ix][y + iy].isBomb()) {
+						this.tiles[x + ix][y + iy].setCovered(false);
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+
 	public void createBoard(Point pos, Point sizeTile, int tileSize, int nbOfBombs) {
 		this.init = false;
 
@@ -149,6 +167,45 @@ public class Board {
 		for (Tile[] tiles : this.tiles) {
 			for (Tile tile : tiles) {
 				tile.setCovered(false);
+			}
+		}
+	}
+
+	private void uncoverTile(Tile tile, int mouse) {
+		if (mouse == MouseEvent.LEFT_RELEASED) {
+			tile.setCovered(false);
+		}
+	}
+
+	public void update(Input input) {
+		for (MouseEvent e : input.mouseEvents) {
+			if (e.id != MouseEvent.MOVE) {
+				if (e.pos.x > this.pos.x && e.pos.y > this.pos.y && e.pos.x < this.pos.x + this.size.x
+						&& e.pos.y < this.pos.y + this.size.y) {
+
+					boolean testX = true;
+
+					boolean found = false;
+
+					for (Tile[] tiles2 : this.tiles) {
+
+						for (Tile tile : tiles2) {
+							if (testX && !tile.isXAligned(e.pos.ix())) {
+								break;
+							}
+							testX = false;
+							if (tile.isYAligned(e.pos.iy())) {
+								this.uncoverTile(tile, e.id);
+								found = true;
+							}
+						}
+						if (found) {
+							break;
+						}
+						testX = true;
+					}
+
+				}
 			}
 		}
 	}
