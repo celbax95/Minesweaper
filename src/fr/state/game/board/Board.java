@@ -1,9 +1,13 @@
 package fr.state.game.board;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import fr.inputs.Input;
+import fr.inputs.keyboard.KeyboardEvent;
 import fr.inputs.mouse.MouseEvent;
 import fr.util.point.Point;
 
@@ -68,6 +72,8 @@ public class Board {
 		}
 	}
 
+	private int multiKey;
+
 	private Tile[][] tiles;
 
 	private Point pos;
@@ -82,8 +88,33 @@ public class Board {
 
 	private boolean init;
 
+	private Map<Integer, Tile.Actions> mouseActions;
+	private Map<Integer, Tile.Actions> keyboardActions;
+
 	public Board() {
 		this.init = false;
+		this.multiKey = 0;
+		this.createActions();
+	}
+
+	private void actionOnTile(Tile tile, Tile.Actions action) {
+		if (action == null)
+			return;
+
+		if (tile.isCovered()) {
+			if (action == Tile.Actions.UNCOVER) {
+				tile.setCovered(false);
+			} else if (action == Tile.Actions.FLAG || action == Tile.Actions.MULTI) {
+				@SuppressWarnings("unused")
+				boolean flagged = tile.toggleFlag();
+			}
+		} else {
+			if (action == Tile.Actions.MULTI) {
+				if (this.getFlagsAround(tile) == tile.getBombsASide()) {
+					this.uncoverAround(tile);
+				}
+			}
+		}
 	}
 
 	public void chainedUncover(Tile tile) {
@@ -100,6 +131,15 @@ public class Board {
 				}
 			}
 		}
+	}
+
+	private void createActions() {
+		this.mouseActions = new HashMap<>();
+		this.mouseActions.put(MouseEvent.LEFT_PRESSED, Tile.Actions.UNCOVER);
+		this.mouseActions.put(MouseEvent.RIGHT_PRESSED, Tile.Actions.FLAG);
+		this.mouseActions.put(MouseEvent.MIDDLE_PRESSED, Tile.Actions.MULTI);
+		this.keyboardActions = new HashMap<>();
+		this.keyboardActions.put(KeyEvent.VK_SPACE, Tile.Actions.MULTI);
 	}
 
 	public void createBoard(Point pos, Point sizeTile, int tileSize, int nbOfBombs) {
@@ -148,6 +188,19 @@ public class Board {
 		return flagCount;
 	}
 
+	public Tile getPointedTile(Point p) {
+		for (Tile[] tiles2 : this.tiles) {
+			for (Tile tile : tiles2) {
+				if (!tile.isXAligned(p.ix())) {
+					break;
+				}
+				if (tile.isYAligned(p.iy()))
+					return tile;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * @return the pos
 	 */
@@ -162,6 +215,12 @@ public class Board {
 		return this.tileSize;
 	}
 
+	public boolean isInBoard(Point p) {
+		if (p == null)
+			return false;
+		return p.x > this.pos.x && p.y > this.pos.y && p.x < this.pos.x + this.size.x && p.y < this.pos.y + this.size.y;
+	}
+
 	/**
 	 * @return the init
 	 */
@@ -169,21 +228,14 @@ public class Board {
 		return this.init;
 	}
 
-	private void mouseActionOnTile(Tile tile, int mouse) {
-		if (tile.isCovered()) {
-			if (mouse == MouseEvent.LEFT_RELEASED) {
-				tile.setCovered(false);
-			} else if (mouse == MouseEvent.RIGHT_RELEASED) {
-				@SuppressWarnings("unused")
-				boolean flagged = tile.toggleFlag();
-			}
-		} else {
-			if (mouse == MouseEvent.MIDDLE_RELEASED) {
-				if (this.getFlagsAround(tile) == tile.getBombsASide()) {
-					this.uncoverAround(tile);
-				}
-			}
-		}
+	public void reset() {
+		this.init = false;
+
+		this.tiles = getEmptyBoard(this, this.pos, this.sizeTile, this.tileSize);
+		addBombs(this.tiles, this.sizeTile, this.nbOfBombs);
+		initInfoTiles(this.tiles);
+
+		this.init = true;
 	}
 
 	/**
@@ -225,35 +277,30 @@ public class Board {
 	}
 
 	public void update(Input input) {
+
+		// Mouse events
 		for (MouseEvent e : input.mouseEvents) {
-			if (e.id != MouseEvent.MOVE) {
-				if (e.pos.x > this.pos.x && e.pos.y > this.pos.y && e.pos.x < this.pos.x + this.size.x
-						&& e.pos.y < this.pos.y + this.size.y) {
-
-					boolean testX = true;
-
-					boolean found = false;
-
-					for (Tile[] tiles2 : this.tiles) {
-
-						for (Tile tile : tiles2) {
-							if (testX && !tile.isXAligned(e.pos.ix())) {
-								break;
-							}
-							testX = false;
-							if (tile.isYAligned(e.pos.iy())) {
-								this.mouseActionOnTile(tile, e.id);
-								found = true;
-							}
-						}
-						if (found) {
-							break;
-						}
-						testX = true;
+			if (this.mouseActions.containsKey(e.id)) {
+				if (this.isInBoard(e.pos)) {
+					Tile tile = this.getPointedTile(e.pos);
+					if (tile != null) {
+						this.actionOnTile(tile, this.mouseActions.get(e.id));
 					}
-
 				}
 			}
 		}
+
+		// Keyboard events
+		for (KeyboardEvent e : input.keyboardEvents) {
+			if (e.pressed && this.keyboardActions.containsKey(e.key)) {
+				if (this.isInBoard(e.mousePos)) {
+					Tile tile = this.getPointedTile(e.mousePos);
+					if (tile != null) {
+						this.actionOnTile(tile, this.keyboardActions.get(e.key));
+					}
+				}
+			}
+		}
+
 	}
 }

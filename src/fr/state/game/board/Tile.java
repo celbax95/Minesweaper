@@ -6,6 +6,11 @@ import java.awt.Graphics2D;
 import fr.util.point.Point;
 
 public abstract class Tile {
+
+	public enum Actions {
+		UNCOVER, FLAG, MULTI
+	}
+
 	protected Board board;
 
 	protected int bombsASide;

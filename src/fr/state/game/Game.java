@@ -37,6 +37,5 @@ public class Game {
 
 	public void update(Input input) {
 		this.board.update(input);
-
 	}
 }

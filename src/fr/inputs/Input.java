@@ -84,4 +84,8 @@ public class Input {
 	public Mouse getMouseMirrorListener() {
 		return this.mouse;
 	}
+
+	public void setMouseDataInKeyboardEvent(boolean state) {
+		this.keyboardEventHolder.setMouse(state ? this.mouse : null);
+	}
 }
