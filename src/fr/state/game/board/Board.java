@@ -98,6 +98,7 @@ public class Board {
 			Random r = new Random();
 
 			Point min = startingPoint.clone().sub(new Point(1, 1));
+			Point max = startingPoint.clone().add(new Point(1, 1));
 
 			for (int x = 0; x < 3; x++) {
 				for (int y = 0; y < 3; y++) {
@@ -110,7 +111,8 @@ public class Board {
 
 							Tile newTile = board[randomPoint.ix()][randomPoint.iy()];
 
-							if (!newTile.isBomb()) {
+							if (!newTile.isBomb() && !(randomPoint.ix() >= min.ix() && randomPoint.ix() <= max.ix()
+									&& randomPoint.iy() >= min.iy() && randomPoint.iy() <= max.iy())) {
 								board[min.ix() + x][min.iy() + y] = new InfoTile(tile.getBoard(), tile.getPos(),
 										tile.getSize(), tile.getTilePos());
 
@@ -185,8 +187,10 @@ public class Board {
 
 					this.full = false;
 				} else {
-					tile.setCovered(false);
-					this.uncoveredTiles++;
+					if (tile.isCovered()) {
+						tile.setCovered(false);
+						this.uncoveredTiles++;
+					}
 				}
 			} else if (action == Tile.Actions.FLAG || action == Tile.Actions.MULTI) {
 				if (tile.toggleFlag()) {
@@ -212,7 +216,7 @@ public class Board {
 			for (int iy = 0; iy < 3; iy++) {
 				try {
 					Tile selectedTile = this.tiles[x + ix][y + iy];
-					if (!selectedTile.isBomb() && selectedTile.isCovered()) {
+					if (!selectedTile.isBomb() && selectedTile.isCovered() && !selectedTile.isFlagged()) {
 						selectedTile.setCovered(false);
 						this.uncoveredTiles++;
 					}
@@ -430,9 +434,10 @@ public class Board {
 			for (int iy = 0; iy < 3; iy++) {
 				try {
 					Tile selectedTile = this.tiles[x + ix][y + iy];
-					if (selectedTile.isCovered()) {
+					if (selectedTile.isCovered() && !selectedTile.isFlagged()) {
 						selectedTile.setCovered(false);
 						this.uncoveredTiles++;
+						System.out.println(this.uncoveredTiles);
 					}
 				} catch (Exception e) {
 				}
