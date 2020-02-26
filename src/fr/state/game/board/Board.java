@@ -139,6 +139,8 @@ public class Board {
 
 	private boolean isFull;
 
+	private int nbOfFlags;
+
 	private Map<Integer, Tile.Actions> mouseActions;
 	private Map<Integer, Tile.Actions> keyboardActions;
 
@@ -146,6 +148,7 @@ public class Board {
 		this.init = false;
 		this.multiKey = 0;
 		this.isFull = true;
+		this.nbOfFlags = 0;
 		this.createActions();
 	}
 
@@ -162,8 +165,12 @@ public class Board {
 					this.isFull = false;
 				}
 			} else if (action == Tile.Actions.FLAG || action == Tile.Actions.MULTI) {
-				@SuppressWarnings("unused")
-				boolean flagged = tile.toggleFlag();
+				if (tile.toggleFlag()) {
+					this.nbOfFlags++;
+				} else {
+					this.nbOfFlags--;
+				}
+
 			}
 		} else {
 			if (action == Tile.Actions.MULTI) {
@@ -206,6 +213,7 @@ public class Board {
 		this.sizeTile = sizeTile.clone();
 		this.tileSize = tileSize;
 		this.nbOfBombs = nbOfBombs;
+		this.nbOfFlags = 0;
 
 		this.size = this.sizeTile.clone().mult(this.tileSize)
 				.add(this.sizeTile.clone().sub(new Point(1, 1)).mult(spaceBetween));
@@ -245,6 +253,20 @@ public class Board {
 		}
 
 		return flagCount;
+	}
+
+	/**
+	 * @return the nbOfBombs
+	 */
+	public int getNbOfBombs() {
+		return this.nbOfBombs;
+	}
+
+	/**
+	 * @return the nbOfFlags
+	 */
+	public int getNbOfFlags() {
+		return this.nbOfFlags;
 	}
 
 	public Tile getPointedTile(Point p) {
@@ -289,6 +311,8 @@ public class Board {
 
 	public void reset() {
 		this.init = false;
+
+		this.nbOfFlags = 0;
 
 		this.tiles = getEmptyBoard(this, this.pos, this.sizeTile, this.tileSize);
 		addBombs(this.tiles, this.sizeTile, this.nbOfBombs);
