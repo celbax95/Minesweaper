@@ -25,17 +25,20 @@ public class Game {
 		this.winData = wd;
 
 		int tileSize = 30;
-		int nbTile = 20;
 
 		int yOffset = 22;
 
-		int bombsAmount = 83;
+		int width = ConfGame.getWidth();
+
+		int height = ConfGame.getHeight();
+
+		int bombsAmount = ConfGame.getBombes();
 
 		this.board = new Board();
 		this.board.createBoard(
 				this.winData.getHalfWindowSize().clone()
-						.sub(new Point(nbTile * tileSize, nbTile * tileSize).div(2).sub(new Point(0, yOffset))),
-				new Point(nbTile, nbTile), tileSize, bombsAmount);
+						.sub(new Point(width * tileSize, height * tileSize).div(2).sub(new Point(0, yOffset))),
+				new Point(width, height), tileSize, bombsAmount);
 
 		this.hud = new HUD(this.board, this.winData);
 

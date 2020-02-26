@@ -7,6 +7,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 
 import fr.inputs.Input;
+import fr.state.game.ConfGame;
 import fr.state.game.board.Board;
 import fr.util.point.Point;
 import fr.window.WinData;
@@ -30,6 +31,8 @@ public class HUD {
 	private Point timerPos;
 	private Point bestScorePos;
 
+	private int bestScore;
+
 	private AffineTransform af;
 
 	public HUD(Board board, WinData winData) {
@@ -37,6 +40,8 @@ public class HUD {
 		this.winData = winData;
 
 		this.bombsRemaining = 0;
+
+		this.bestScore = ConfGame.getBestScore();
 
 		this.af = null;
 
@@ -63,7 +68,7 @@ public class HUD {
 
 			g.drawString(br, this.bombCountPos.ix(), this.bombCountPos.iy());
 			g.drawString(sf, this.timerPos.ix(), this.timerPos.iy());
-			g.drawString(bestScoreTemplate + "000", this.bestScorePos.ix(), this.bestScorePos.iy());
+			g.drawString(bestScoreTemplate + this.bestScore, this.bestScorePos.ix(), this.bestScorePos.iy());
 		} else {
 			this.af = g.getTransform();
 			this.setLabelsPos();

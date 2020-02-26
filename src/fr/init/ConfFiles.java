@@ -17,6 +17,8 @@ public class ConfFiles {// String name, String path
 		{
 			this.put("winConf", "winConf.xml");
 			this.put("controls", "controls.xml");
+			this.put("score", "score.xml");
+			this.put("game", "game.xml");
 		}
 	};
 

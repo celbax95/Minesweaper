@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><conf>
+
+    <!-- Score -->
+
+    <param name="bestScore" type="integer" value="999"/>
+
+</conf>

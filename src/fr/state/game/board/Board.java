@@ -10,6 +10,7 @@ import java.util.Random;
 import fr.inputs.Input;
 import fr.inputs.keyboard.KeyboardEvent;
 import fr.inputs.mouse.MouseEvent;
+import fr.state.game.ConfGame;
 import fr.util.point.Point;
 
 public class Board {
@@ -232,7 +233,7 @@ public class Board {
 		this.mouseActions.put(MouseEvent.RIGHT_PRESSED, Tile.Actions.FLAG);
 		this.mouseActions.put(MouseEvent.MIDDLE_PRESSED, Tile.Actions.MULTI);
 		this.keyboardActions = new HashMap<>();
-		this.keyboardActions.put(KeyEvent.VK_SPACE, Tile.Actions.MULTI);
+		this.keyboardActions.put(ConfGame.getMultiKey(), Tile.Actions.MULTI);
 	}
 
 	public void createBoard(Point pos, Point sizeTile, int tileSize, int nbOfBombs) {
@@ -477,8 +478,11 @@ public class Board {
 		}
 
 		if (this.uncoveredTiles == this.nbOfTiles - this.nbOfBombs) {
-
 			this.finished = true;
+			long score = System.currentTimeMillis() / this.startingTime / 1000;
+			if (score > ConfGame.getBestScore()) {
+				ConfGame.setBestScore(score);
+			}
 		}
 	}
 }

@@ -2,14 +2,6 @@
 
     <!-- Controles -->
 
-    <param name="leftMovement" type="integer" value="81"/>
-
-    <param name="rightMovement" type="integer" value="68"/>
-
-    <param name="jump" type="integer" value="32"/>
-
-    <param name="shoot" type="integer" value="-1"/>
-
-    <param name="use" type="integer" value="-3"/>
+    <param name="multiKey" type="integer" value="32"/>
 
 </conf>

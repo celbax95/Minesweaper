@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><conf>
+
+    <!-- Game -->
+
+    <param name="bombes" type="integer" value="100"/>
+
+    <param name="width" type="integer" value="25"/>
+
+    <param name="height" type="integer" value="20"/>
+
+</conf>
