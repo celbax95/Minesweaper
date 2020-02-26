@@ -5,17 +5,38 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.util.point.Point;
 
 public class InfoTile extends Tile {
+
+	private static final Map<Integer, Color> infoColor;
+
+	static {
+		infoColor = new HashMap<>();
+
+		int colorTone1 = 100;
+
+		int colorTone2 = 70;
+
+		infoColor.put(1, new Color(0, 0, colorTone1));
+		infoColor.put(2, new Color(0, colorTone1, 0));
+		infoColor.put(3, new Color(colorTone1, 0, 0));
+		infoColor.put(4, new Color(colorTone1, 80, 0));
+		infoColor.put(5, new Color(colorTone2, 0, 0));
+		infoColor.put(6, new Color(0, colorTone2, colorTone2));
+		infoColor.put(7, new Color(colorTone1, 0, colorTone1));
+		infoColor.put(8, new Color(colorTone1, colorTone1, colorTone1));
+	}
 
 	Font font;
 	private Point labelPos;
 
 	public InfoTile(Board board, Point pos, Point size, Point tilePos) {
 		super(board, pos, size, tilePos);
-		this.font = new Font("Arial", Font.PLAIN, 20);
+		this.font = new Font("Arial", Font.BOLD, 20);
 		this.setLabelPos();
 	}
 
@@ -27,7 +48,8 @@ public class InfoTile extends Tile {
 			g.setColor(this.getUncoveredColor());
 			this.fillRect(g);
 			if (this.bombsASide != 0) {
-				g.setColor(Color.black);
+
+				g.setColor(infoColor.get(this.bombsASide));
 				g.setFont(this.font);
 
 				g.drawString(String.valueOf(this.bombsASide), this.labelPos.ix(), this.labelPos.iy());
