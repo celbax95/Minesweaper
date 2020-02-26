@@ -75,7 +75,7 @@ public class StatePanel extends JPanel implements Statable {
 		this.requestFocusInWindow();
 		this.setFocusTraversalKeysEnabled(false);
 
-		this.setSize(this.winData.getWindowSize().ix(), this.winData.getWindowSize().iy());
+		this.setSize(this.winData.getWindowSize().ix() + 9, this.winData.getWindowSize().iy() + 2);
 	}
 
 	@Override

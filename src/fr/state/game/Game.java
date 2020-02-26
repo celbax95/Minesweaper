@@ -24,7 +24,7 @@ public class Game {
 		this.gameState = gs;
 		this.winData = wd;
 
-		int tileSize = 32;
+		int tileSize = 30;
 		int nbTile = 20;
 
 		int yOffset = 22;
@@ -37,7 +37,7 @@ public class Game {
 						.sub(new Point(nbTile * tileSize, nbTile * tileSize).div(2).sub(new Point(0, yOffset))),
 				new Point(nbTile, nbTile), tileSize, bombsAmount);
 
-		this.hud = new HUD(this.board);
+		this.hud = new HUD(this.board, this.winData);
 
 	}
 

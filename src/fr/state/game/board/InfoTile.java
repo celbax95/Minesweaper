@@ -56,6 +56,6 @@ public class InfoTile extends Tile {
 
 		Point offset = this.size.clone().sub(labelSize).div(2);
 
-		this.labelPos = new Point(this.pos.x + offset.x, this.pos.y + this.size.y - labelSize.y + offset.y);
+		this.labelPos = new Point(this.pos.x + offset.x + 0.5, this.pos.y + this.size.y - labelSize.y + offset.y + 2);
 	}
 }
