@@ -446,16 +446,15 @@ public class Board {
 	}
 
 	public void update(Input input) {
-
 		// Mouse events
 		for (MouseEvent e : input.mouseEvents) {
 			if (this.mouseActions.containsKey(e.id)) {
-				if (!this.gameOver && this.isInBoard(e.pos)) {
+				if (!this.gameOver && !this.finished && this.isInBoard(e.pos)) {
 					Tile tile = this.getPointedTile(e.pos);
 					if (tile != null) {
 						this.actionOnTile(tile, this.mouseActions.get(e.id));
 					}
-				} else if (this.gameOver) {
+				} else if (this.gameOver || this.finished) {
 					this.reset();
 				}
 			}
@@ -464,12 +463,12 @@ public class Board {
 		// Keyboard events
 		for (KeyboardEvent e : input.keyboardEvents) {
 			if (e.pressed && this.keyboardActions.containsKey(e.key)) {
-				if (!this.gameOver && this.isInBoard(e.mousePos)) {
+				if (!this.gameOver && !this.finished && this.isInBoard(e.mousePos)) {
 					Tile tile = this.getPointedTile(e.mousePos);
 					if (tile != null) {
 						this.actionOnTile(tile, this.keyboardActions.get(e.key));
 					}
-				} else if (this.gameOver) {
+				} else if (this.gameOver || this.finished) {
 					this.reset();
 				}
 			} else if (e.pressed && e.key == KeyEvent.VK_BACK_SPACE) {
@@ -479,7 +478,7 @@ public class Board {
 
 		if (this.uncoveredTiles == this.nbOfTiles - this.nbOfBombs) {
 			this.finished = true;
-			long score = System.currentTimeMillis() / this.startingTime / 1000;
+			long score = (System.currentTimeMillis() - this.startingTime) / 1000;
 			if (score < ConfGame.getBestScore()) {
 				ConfGame.setBestScore(score);
 			}

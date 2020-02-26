@@ -106,5 +106,9 @@ public class HUD {
 				this.startedFor = (System.currentTimeMillis() - this.board.getStartingTime()) / 1000;
 			}
 		}
+
+		if (this.board.isFull()) {
+			this.startedFor = 0;
+		}
 	}
 }
