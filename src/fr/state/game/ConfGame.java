@@ -1,9 +1,12 @@
 package fr.state.game;
 
 import fr.datafilesmanager.DatafilesManager;
+import fr.datafilesmanager.Encoder;
 import fr.datafilesmanager.XMLManager;
 
 public class ConfGame {
+
+	private static final int ENCODE_KEY = 983211;
 
 	public static int getBestScore() {
 
@@ -12,7 +15,7 @@ public class ConfGame {
 
 		XMLManager m = DatafilesManager.getInstance().getXmlManager();
 
-		return (int) m.getParam(score, "bestScore", 0);
+		return Encoder.decodeToInt(m.getParam(score, "bestScore", 0).toString(), 999, ENCODE_KEY);
 	}
 
 	public static int getBombes() {
@@ -62,7 +65,7 @@ public class ConfGame {
 
 		XMLManager m = DatafilesManager.getInstance().getXmlManager();
 
-		m.setParam(score, "bestScore", newValue);
+		m.setParam(score, "bestScore", Encoder.encode((int) newValue, ENCODE_KEY));
 		m.saveFile(score);
 	}
 }

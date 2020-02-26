@@ -2,7 +2,7 @@
 
     <!-- Game -->
 
-    <param name="bombes" type="integer" value="100"/>
+    <param name="bombes" type="integer" value="10"/>
 
     <param name="width" type="integer" value="25"/>
 

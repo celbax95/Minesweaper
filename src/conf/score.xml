@@ -2,6 +2,6 @@
 
     <!-- Score -->
 
-    <param name="bestScore" type="integer" value="999"/>
+    <param name="bestScore" type="string" value=""/>
 
 </conf>

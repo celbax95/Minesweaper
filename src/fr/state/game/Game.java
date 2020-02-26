@@ -41,7 +41,6 @@ public class Game {
 				new Point(width, height), tileSize, bombsAmount);
 
 		this.hud = new HUD(this.board, this.winData);
-
 	}
 
 	public void draw(Graphics2D g) {

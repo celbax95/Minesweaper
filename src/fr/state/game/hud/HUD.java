@@ -109,6 +109,7 @@ public class HUD {
 
 		if (this.board.isFull()) {
 			this.startedFor = 0;
+			this.bestScore = ConfGame.getBestScore();
 		}
 	}
 }
