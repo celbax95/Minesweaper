@@ -360,8 +360,9 @@ public class Board {
 						this.actionOnTile(tile, this.keyboardActions.get(e.key));
 					}
 				}
+			} else if (e.key == KeyEvent.VK_BACK_SPACE) {
+				this.reset();
 			}
 		}
-
 	}
 }
