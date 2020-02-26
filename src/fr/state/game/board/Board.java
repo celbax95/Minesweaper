@@ -437,7 +437,6 @@ public class Board {
 					if (selectedTile.isCovered() && !selectedTile.isFlagged()) {
 						selectedTile.setCovered(false);
 						this.uncoveredTiles++;
-						System.out.println(this.uncoveredTiles);
 					}
 				} catch (Exception e) {
 				}
