@@ -143,6 +143,8 @@ public class Board {
 
 	private long startingTime;
 
+	private boolean finished;
+
 	private Map<Integer, Tile.Actions> mouseActions;
 	private Map<Integer, Tile.Actions> keyboardActions;
 
@@ -161,11 +163,13 @@ public class Board {
 
 		if (tile.isCovered()) {
 			if (action == Tile.Actions.UNCOVER) {
-				tile.setCovered(false);
 				if (this.isFull) {
 					startingPoint(this.tiles, tile.getTilePos());
+					tile = this.tiles[tile.getTilePos().ix()][tile.getTilePos().iy()];
 					this.uncoverAround(tile);
 					this.isFull = false;
+				} else {
+					tile.setCovered(false);
 				}
 			} else if (action == Tile.Actions.FLAG || action == Tile.Actions.MULTI) {
 				if (tile.toggleFlag()) {
@@ -173,7 +177,6 @@ public class Board {
 				} else {
 					this.nbOfFlags--;
 				}
-
 			}
 		} else {
 			if (action == Tile.Actions.MULTI) {
@@ -217,6 +220,7 @@ public class Board {
 		this.tileSize = tileSize;
 		this.nbOfBombs = nbOfBombs;
 		this.nbOfFlags = 0;
+		this.finished = false;
 		this.startingTime = System.currentTimeMillis();
 
 		this.size = this.sizeTile.clone().mult(this.tileSize)
@@ -237,6 +241,10 @@ public class Board {
 				tile.draw(g);
 			}
 		}
+	}
+
+	private void finish() {
+		this.finished = true;
 	}
 
 	private int getFlagsAround(Tile tile) {
@@ -307,6 +315,13 @@ public class Board {
 		return this.tileSize;
 	}
 
+	/**
+	 * @return the finished
+	 */
+	public boolean isFinished() {
+		return this.finished;
+	}
+
 	public boolean isInBoard(Point p) {
 		if (p == null)
 			return false;
@@ -324,6 +339,7 @@ public class Board {
 		this.init = false;
 
 		this.nbOfFlags = 0;
+		this.finished = false;
 		this.startingTime = System.currentTimeMillis();
 
 		this.tiles = getEmptyBoard(this, this.pos, this.sizeTile, this.tileSize);
@@ -355,6 +371,8 @@ public class Board {
 				tile.setCovered(false);
 			}
 		}
+
+		this.finish();
 	}
 
 	private void uncoverAround(Tile tile) {

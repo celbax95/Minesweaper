@@ -35,10 +35,12 @@ public class HUD {
 	}
 
 	public void update(Input input) {
-		this.bombsRemaining = this.board.getNbOfBombs() - this.board.getNbOfFlags();
+		if (!this.board.isFinished()) {
+			this.bombsRemaining = this.board.getNbOfBombs() - this.board.getNbOfFlags();
 
-		if (this.startedFor < 999) {
-			this.startedFor = (System.currentTimeMillis() - this.board.getStartingTime()) / 1000;
+			if (this.startedFor < 999) {
+				this.startedFor = (System.currentTimeMillis() - this.board.getStartingTime()) / 1000;
+			}
 		}
 	}
 }
