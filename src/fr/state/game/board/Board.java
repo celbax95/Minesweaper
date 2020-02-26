@@ -480,7 +480,7 @@ public class Board {
 		if (this.uncoveredTiles == this.nbOfTiles - this.nbOfBombs) {
 			this.finished = true;
 			long score = System.currentTimeMillis() / this.startingTime / 1000;
-			if (score > ConfGame.getBestScore()) {
+			if (score < ConfGame.getBestScore()) {
 				ConfGame.setBestScore(score);
 			}
 		}
