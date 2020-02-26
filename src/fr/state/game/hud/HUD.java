@@ -13,6 +13,8 @@ public class HUD {
 
 	private int bombsRemaining;
 
+	private long startedFor;
+
 	public HUD(Board board) {
 		this.board = board;
 
@@ -25,6 +27,7 @@ public class HUD {
 		g.setFont(new Font("Arial", Font.BOLD, 35));
 
 		g.drawString(String.valueOf(this.bombsRemaining), 20, 20);
+		g.drawString(String.valueOf(this.startedFor), 20, 60);
 	}
 
 	public void reset() {
@@ -33,5 +36,9 @@ public class HUD {
 
 	public void update(Input input) {
 		this.bombsRemaining = this.board.getNbOfBombs() - this.board.getNbOfFlags();
+
+		if (this.startedFor < 999) {
+			this.startedFor = (System.currentTimeMillis() - this.board.getStartingTime()) / 1000;
+		}
 	}
 }

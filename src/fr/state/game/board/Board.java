@@ -141,6 +141,8 @@ public class Board {
 
 	private int nbOfFlags;
 
+	private long startingTime;
+
 	private Map<Integer, Tile.Actions> mouseActions;
 	private Map<Integer, Tile.Actions> keyboardActions;
 
@@ -149,6 +151,7 @@ public class Board {
 		this.multiKey = 0;
 		this.isFull = true;
 		this.nbOfFlags = 0;
+		this.startingTime = 0;
 		this.createActions();
 	}
 
@@ -214,6 +217,7 @@ public class Board {
 		this.tileSize = tileSize;
 		this.nbOfBombs = nbOfBombs;
 		this.nbOfFlags = 0;
+		this.startingTime = System.currentTimeMillis();
 
 		this.size = this.sizeTile.clone().mult(this.tileSize)
 				.add(this.sizeTile.clone().sub(new Point(1, 1)).mult(spaceBetween));
@@ -290,6 +294,13 @@ public class Board {
 	}
 
 	/**
+	 * @return the startingTime
+	 */
+	public long getStartingTime() {
+		return this.startingTime;
+	}
+
+	/**
 	 * @return the tileSize
 	 */
 	public int getTileSize() {
@@ -313,6 +324,7 @@ public class Board {
 		this.init = false;
 
 		this.nbOfFlags = 0;
+		this.startingTime = System.currentTimeMillis();
 
 		this.tiles = getEmptyBoard(this, this.pos, this.sizeTile, this.tileSize);
 		addBombs(this.tiles, this.sizeTile, this.nbOfBombs);
