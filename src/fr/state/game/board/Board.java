@@ -21,8 +21,12 @@ public class Board {
 		for (int i = 0; i < nbOfBombs; i++) {
 			Tile tile = board[r.nextInt(sizeTile.ix())][r.nextInt(sizeTile.iy())];
 
-			board[tile.getTilePos().ix()][tile.getTilePos().iy()] = new BombTile(tile.getBoard(), tile.getPos(),
-					tile.getSize(), tile.getTilePos());
+			if (tile.isBomb()) {
+				i--;
+			} else {
+				board[tile.getTilePos().ix()][tile.getTilePos().iy()] = new BombTile(tile.getBoard(), tile.getPos(),
+						tile.getSize(), tile.getTilePos());
+			}
 		}
 	}
 
@@ -72,6 +76,51 @@ public class Board {
 		}
 	}
 
+	private static void startingPoint(Tile[][] board, Point startingPoint) {
+
+		Point boardSize = new Point();
+
+		try {
+			boardSize = new Point(board.length, board[0].length);
+		} catch (Exception e) {
+			return;
+		}
+
+		if (board[startingPoint.ix()][startingPoint.iy()].isBomb()
+				|| board[startingPoint.ix()][startingPoint.iy()].getBombsASide() != 0) {
+			Random r = new Random();
+
+			Point min = startingPoint.clone().sub(new Point(1, 1));
+
+			for (int x = 0; x < 3; x++) {
+				for (int y = 0; y < 3; y++) {
+					Tile tile = board[min.ix() + x][min.iy() + y];
+					if (tile.isBomb()) {
+						boolean replaced = false;
+
+						while (!replaced) {
+							Point randomPoint = new Point(r.nextInt(boardSize.ix()), r.nextInt(boardSize.iy()));
+
+							Tile newTile = board[randomPoint.ix()][randomPoint.iy()];
+
+							if (!newTile.isBomb()) {
+								board[min.ix() + x][min.iy() + y] = new InfoTile(tile.getBoard(), tile.getPos(),
+										tile.getSize(), tile.getTilePos());
+
+								board[randomPoint.ix()][randomPoint.iy()] = new BombTile(newTile.getBoard(),
+										newTile.getPos(), newTile.getSize(), newTile.getTilePos());
+
+								replaced = true;
+							}
+						}
+					}
+				}
+			}
+
+			initInfoTiles(board);
+		}
+	}
+
 	private int multiKey;
 
 	private Tile[][] tiles;
@@ -88,12 +137,15 @@ public class Board {
 
 	private boolean init;
 
+	private boolean isFull;
+
 	private Map<Integer, Tile.Actions> mouseActions;
 	private Map<Integer, Tile.Actions> keyboardActions;
 
 	public Board() {
 		this.init = false;
 		this.multiKey = 0;
+		this.isFull = true;
 		this.createActions();
 	}
 
@@ -104,6 +156,11 @@ public class Board {
 		if (tile.isCovered()) {
 			if (action == Tile.Actions.UNCOVER) {
 				tile.setCovered(false);
+				if (this.isFull) {
+					startingPoint(this.tiles, tile.getTilePos());
+					this.uncoverAround(tile);
+					this.isFull = false;
+				}
 			} else if (action == Tile.Actions.FLAG || action == Tile.Actions.MULTI) {
 				@SuppressWarnings("unused")
 				boolean flagged = tile.toggleFlag();
@@ -156,6 +213,8 @@ public class Board {
 		this.tiles = getEmptyBoard(this, this.pos, this.sizeTile, this.tileSize);
 		addBombs(this.tiles, this.sizeTile, this.nbOfBombs);
 		initInfoTiles(this.tiles);
+
+		this.isFull = true;
 
 		this.init = true;
 	}
@@ -234,6 +293,8 @@ public class Board {
 		this.tiles = getEmptyBoard(this, this.pos, this.sizeTile, this.tileSize);
 		addBombs(this.tiles, this.sizeTile, this.nbOfBombs);
 		initInfoTiles(this.tiles);
+
+		this.isFull = true;
 
 		this.init = true;
 	}
