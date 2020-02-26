@@ -26,18 +26,15 @@ public class HUD {
 
 		g.setFont(new Font("Arial", Font.BOLD, 35));
 
-		g.drawString(String.valueOf(this.bombsRemaining), 20, 20);
-		g.drawString(String.valueOf(this.startedFor), 20, 60);
-	}
+		int y = 40;
 
-	public void reset() {
-
+		g.drawString(String.valueOf(this.bombsRemaining), 80, y);
+		g.drawString(String.valueOf(this.startedFor), 600, y);
 	}
 
 	public void update(Input input) {
-		if (!this.board.isFinished()) {
-			this.bombsRemaining = this.board.getNbOfBombs() - this.board.getNbOfFlags();
-
+		this.bombsRemaining = this.board.getNbOfBombs() - this.board.getNbOfFlags();
+		if (!this.board.isGameOver() && !this.board.isFinished() && !this.board.isFull()) {
 			if (this.startedFor < 999) {
 				this.startedFor = (System.currentTimeMillis() - this.board.getStartingTime()) / 1000;
 			}

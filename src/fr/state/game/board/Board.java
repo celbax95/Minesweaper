@@ -1,5 +1,6 @@
 package fr.state.game.board;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -14,6 +15,12 @@ import fr.util.point.Point;
 public class Board {
 
 	private static final int spaceBetween = 0;
+
+	private static final int FRAME_SIZE = 6;
+
+	private static final Color FINISHED_COLOR = new Color(0, 200, 0);
+	private static final Color GAME_OVER_COLOR = new Color(200, 0, 0);
+	private static final Color FRAME_COLOR = new Color(70, 70, 70);
 
 	public static void addBombs(Tile[][] board, Point sizeTile, int nbOfBombs) {
 		Random r = new Random();
@@ -137,13 +144,19 @@ public class Board {
 
 	private boolean init;
 
-	private boolean isFull;
+	private boolean full;
 
 	private int nbOfFlags;
+
+	private int nbOfTiles;
+
+	private int uncoveredTiles;
 
 	private long startingTime;
 
 	private boolean finished;
+
+	private boolean gameOver;
 
 	private Map<Integer, Tile.Actions> mouseActions;
 	private Map<Integer, Tile.Actions> keyboardActions;
@@ -151,7 +164,7 @@ public class Board {
 	public Board() {
 		this.init = false;
 		this.multiKey = 0;
-		this.isFull = true;
+		this.full = true;
 		this.nbOfFlags = 0;
 		this.startingTime = 0;
 		this.createActions();
@@ -163,13 +176,17 @@ public class Board {
 
 		if (tile.isCovered()) {
 			if (action == Tile.Actions.UNCOVER) {
-				if (this.isFull) {
+				if (this.full) {
 					startingPoint(this.tiles, tile.getTilePos());
 					tile = this.tiles[tile.getTilePos().ix()][tile.getTilePos().iy()];
 					this.uncoverAround(tile);
-					this.isFull = false;
+
+					this.startingTime = System.currentTimeMillis();
+
+					this.full = false;
 				} else {
 					tile.setCovered(false);
+					this.uncoveredTiles++;
 				}
 			} else if (action == Tile.Actions.FLAG || action == Tile.Actions.MULTI) {
 				if (tile.toggleFlag()) {
@@ -194,8 +211,10 @@ public class Board {
 		for (int ix = 0; ix < 3; ix++) {
 			for (int iy = 0; iy < 3; iy++) {
 				try {
-					if (!this.tiles[x + ix][y + iy].isBomb()) {
-						this.tiles[x + ix][y + iy].setCovered(false);
+					Tile selectedTile = this.tiles[x + ix][y + iy];
+					if (!selectedTile.isBomb() && selectedTile.isCovered()) {
+						selectedTile.setCovered(false);
+						this.uncoveredTiles++;
 					}
 				} catch (Exception e) {
 				}
@@ -217,25 +236,34 @@ public class Board {
 
 		this.pos = pos.clone();
 		this.sizeTile = sizeTile.clone();
+		this.nbOfTiles = sizeTile.ix() * sizeTile.iy();
+
 		this.tileSize = tileSize;
 		this.nbOfBombs = nbOfBombs;
-		this.nbOfFlags = 0;
-		this.finished = false;
-		this.startingTime = System.currentTimeMillis();
 
 		this.size = this.sizeTile.clone().mult(this.tileSize)
 				.add(this.sizeTile.clone().sub(new Point(1, 1)).mult(spaceBetween));
 
-		this.tiles = getEmptyBoard(this, this.pos, this.sizeTile, this.tileSize);
-		addBombs(this.tiles, this.sizeTile, this.nbOfBombs);
-		initInfoTiles(this.tiles);
-
-		this.isFull = true;
-
-		this.init = true;
+		this.reset();
 	}
 
 	public void draw(Graphics2D g) {
+
+		Color frameColor;
+
+		if (this.gameOver) {
+			frameColor = GAME_OVER_COLOR;
+		} else if (this.finished) {
+			frameColor = FINISHED_COLOR;
+		} else {
+			frameColor = FRAME_COLOR;
+		}
+
+		g.setColor(frameColor);
+
+		g.fillRect(this.pos.ix() - FRAME_SIZE, this.pos.iy() - FRAME_SIZE, this.size.ix() + FRAME_SIZE * 2,
+				this.size.iy() + FRAME_SIZE * 2);
+
 		for (Tile[] list : this.tiles) {
 			for (Tile tile : list) {
 				tile.draw(g);
@@ -243,8 +271,8 @@ public class Board {
 		}
 	}
 
-	private void finish() {
-		this.finished = true;
+	private void gameOver() {
+		this.gameOver = true;
 	}
 
 	private int getFlagsAround(Tile tile) {
@@ -322,6 +350,20 @@ public class Board {
 		return this.finished;
 	}
 
+	/**
+	 * @return the isFull
+	 */
+	public boolean isFull() {
+		return this.full;
+	}
+
+	/**
+	 * @return the finished
+	 */
+	public boolean isGameOver() {
+		return this.gameOver;
+	}
+
 	public boolean isInBoard(Point p) {
 		if (p == null)
 			return false;
@@ -339,6 +381,8 @@ public class Board {
 		this.init = false;
 
 		this.nbOfFlags = 0;
+		this.gameOver = false;
+		this.uncoveredTiles = 0;
 		this.finished = false;
 		this.startingTime = System.currentTimeMillis();
 
@@ -346,7 +390,7 @@ public class Board {
 		addBombs(this.tiles, this.sizeTile, this.nbOfBombs);
 		initInfoTiles(this.tiles);
 
-		this.isFull = true;
+		this.full = true;
 
 		this.init = true;
 	}
@@ -368,11 +412,14 @@ public class Board {
 	public void uncover() {
 		for (Tile[] tiles : this.tiles) {
 			for (Tile tile : tiles) {
-				tile.setCovered(false);
+				if (tile.isCovered()) {
+					tile.setCovered(false);
+					this.uncoveredTiles++;
+				}
 			}
 		}
 
-		this.finish();
+		this.gameOver();
 	}
 
 	private void uncoverAround(Tile tile) {
@@ -382,8 +429,10 @@ public class Board {
 		for (int ix = 0; ix < 3; ix++) {
 			for (int iy = 0; iy < 3; iy++) {
 				try {
-					if (this.tiles[x + ix][y + iy].isCovered()) {
-						this.tiles[x + ix][y + iy].setCovered(false);
+					Tile selectedTile = this.tiles[x + ix][y + iy];
+					if (selectedTile.isCovered()) {
+						selectedTile.setCovered(false);
+						this.uncoveredTiles++;
 					}
 				} catch (Exception e) {
 				}
@@ -396,11 +445,13 @@ public class Board {
 		// Mouse events
 		for (MouseEvent e : input.mouseEvents) {
 			if (this.mouseActions.containsKey(e.id)) {
-				if (this.isInBoard(e.pos)) {
+				if (!this.gameOver && this.isInBoard(e.pos)) {
 					Tile tile = this.getPointedTile(e.pos);
 					if (tile != null) {
 						this.actionOnTile(tile, this.mouseActions.get(e.id));
 					}
+				} else if (this.gameOver) {
+					this.reset();
 				}
 			}
 		}
@@ -408,15 +459,22 @@ public class Board {
 		// Keyboard events
 		for (KeyboardEvent e : input.keyboardEvents) {
 			if (e.pressed && this.keyboardActions.containsKey(e.key)) {
-				if (this.isInBoard(e.mousePos)) {
+				if (!this.gameOver && this.isInBoard(e.mousePos)) {
 					Tile tile = this.getPointedTile(e.mousePos);
 					if (tile != null) {
 						this.actionOnTile(tile, this.keyboardActions.get(e.key));
 					}
+				} else if (this.gameOver) {
+					this.reset();
 				}
-			} else if (e.key == KeyEvent.VK_BACK_SPACE) {
+			} else if (e.pressed && e.key == KeyEvent.VK_BACK_SPACE) {
 				this.reset();
 			}
+		}
+
+		if (this.uncoveredTiles == this.nbOfTiles - this.nbOfBombs) {
+
+			this.finished = true;
 		}
 	}
 }

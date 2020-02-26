@@ -10,7 +10,7 @@ import fr.statepanel.StatePanel;
 
 public class GameState implements IAppState {
 
-	private Game m;
+	private Game game;
 
 	private StatePanel sp;
 
@@ -24,7 +24,7 @@ public class GameState implements IAppState {
 
 	@Override
 	public void draw(Graphics2D g) {
-		this.m.draw(g);
+		this.game.draw(g);
 	}
 
 	public void getInput() {
@@ -46,7 +46,7 @@ public class GameState implements IAppState {
 
 		ImageManager.getInstance().removeAll();
 
-		this.m = new Game(this);
+		this.game = new Game(this, this.sp.getWinData());
 
 		this.sp.setBackground(this.BACKGROUND);
 
@@ -69,7 +69,7 @@ public class GameState implements IAppState {
 		this.sp.removeKeyboardListener(this.input.getKeyboardMirrorListener());
 		this.sp.removeMouseListener(this.input.getMouseEventListener());
 		this.sp.removeMouseListener(this.input.getMouseMirrorListener());
-		this.m = null;
+		this.game = null;
 		this.sp = null;
 		this.input = null;
 		this.loop.stop();
@@ -77,6 +77,6 @@ public class GameState implements IAppState {
 	}
 
 	public void update() {
-		this.m.update(this.input);
+		this.game.update(this.input);
 	}
 }
