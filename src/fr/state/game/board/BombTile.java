@@ -16,7 +16,7 @@ public class BombTile extends Tile {
 		if (this.covered) {
 			this.coveredDraw(g);
 		} else {
-			g.setColor(new Color(160, 160, 160));
+			g.setColor(this.getUncoveredColor());
 			this.fillRect(g);
 			g.setColor(Color.black);
 			this.fillRect(g, 4);

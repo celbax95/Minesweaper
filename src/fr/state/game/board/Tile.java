@@ -40,7 +40,7 @@ public abstract class Tile {
 	}
 
 	protected void coveredDraw(Graphics2D g) {
-		g.setColor(new Color(100, 100, 100));
+		g.setColor(this.getCoveredColor());
 		this.fillRect(g);
 		if (this.flagged) {
 			g.setColor(new Color(230, 0, 0));
@@ -74,6 +74,16 @@ public abstract class Tile {
 		return this.bombsASide;
 	}
 
+	protected Color getCoveredColor() {
+		int color1 = 110;
+		int color2 = color1 - 9;
+
+		if ((this.tilePos.ix() + this.tilePos.iy() % 2) % 2 == 0)
+			return new Color(color1, color1, color1);
+		else
+			return new Color(color2, color2, color2);
+	}
+
 	/**
 	 * @return the pos
 	 */
@@ -93,6 +103,11 @@ public abstract class Tile {
 	 */
 	public Point getTilePos() {
 		return this.tilePos;
+	}
+
+	protected Color getUncoveredColor() {
+		int color = 140;
+		return new Color(color, color, color);
 	}
 
 	public abstract boolean isBomb();

@@ -24,7 +24,7 @@ public class InfoTile extends Tile {
 		if (this.covered) {
 			this.coveredDraw(g);
 		} else {
-			g.setColor(new Color(160, 160, 160));
+			g.setColor(this.getUncoveredColor());
 			this.fillRect(g);
 			if (this.bombsASide != 0) {
 				g.setColor(Color.black);

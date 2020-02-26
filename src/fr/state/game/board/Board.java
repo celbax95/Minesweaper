@@ -13,7 +13,7 @@ import fr.util.point.Point;
 
 public class Board {
 
-	private static final int spaceBetween = 1;
+	private static final int spaceBetween = 0;
 
 	public static void addBombs(Tile[][] board, Point sizeTile, int nbOfBombs) {
 		Random r = new Random();
