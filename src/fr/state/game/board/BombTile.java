@@ -16,8 +16,10 @@ public class BombTile extends Tile {
 		if (this.covered) {
 			this.coveredDraw(g);
 		} else {
-			g.setColor(Color.black);
+			g.setColor(new Color(160, 160, 160));
 			this.fillRect(g);
+			g.setColor(Color.black);
+			this.fillRect(g, 4);
 		}
 	}
 
@@ -28,5 +30,6 @@ public class BombTile extends Tile {
 
 	@Override
 	public void onCoveredChanged() {
+		this.board.uncover();
 	}
 }

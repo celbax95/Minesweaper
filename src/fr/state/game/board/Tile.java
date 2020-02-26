@@ -52,7 +52,12 @@ public abstract class Tile {
 	public abstract void draw(Graphics2D g);
 
 	protected void fillRect(Graphics2D g) {
-		g.fillRect(this.pos.ix(), this.pos.iy(), this.size.ix(), this.size.iy());
+		this.fillRect(g, 0);
+	}
+
+	protected void fillRect(Graphics2D g, int offset) {
+		g.fillRect(this.pos.ix() + offset, this.pos.iy() + offset, this.size.ix() - offset * 2,
+				this.size.iy() - offset * 2);
 	}
 
 	/**
