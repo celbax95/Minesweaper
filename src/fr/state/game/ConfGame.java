@@ -8,64 +8,72 @@ public class ConfGame {
 
 	private static final int ENCODE_KEY = 983211;
 
-	public static int getBestScore() {
+	private static DatafilesManager dfm;
+	private static XMLManager xmlManager;
 
-		DatafilesManager dfm = DatafilesManager.getInstance();
-		Object score = dfm.getFile("score");
+	static {
+		dfm = DatafilesManager.getInstance();
+		xmlManager = DatafilesManager.getInstance().getXmlManager();
+	}
 
-		XMLManager m = DatafilesManager.getInstance().getXmlManager();
+	public static int getBestScore(int width, int height, int bombs) {
 
-		return Encoder.decodeToInt(m.getParam(score, "bestScore", 0).toString(), 999, ENCODE_KEY);
+		Object file = dfm.getFile("score");
+
+		String paramName = Encoder.encode(width + " " + height + " " + bombs, ENCODE_KEY);
+
+		return Encoder.decode(xmlManager.getParam(file, paramName, 0).toString(), -1, ENCODE_KEY);
 	}
 
 	public static int getBombes() {
 
-		DatafilesManager dfm = DatafilesManager.getInstance();
-		Object controls = dfm.getFile("game");
+		Object file = dfm.getFile("game");
 
-		XMLManager m = DatafilesManager.getInstance().getXmlManager();
+		return (int) xmlManager.getParam(file, "bombs", 83);
+	}
 
-		return (int) m.getParam(controls, "bombes", 83);
+	public static double getBombsDensity() {
+
+		Object file = dfm.getFile("game");
+
+		return (double) xmlManager.getParam(file, "bombsDensity", 0.001);
 	}
 
 	public static int getHeight() {
 
-		DatafilesManager dfm = DatafilesManager.getInstance();
-		Object controls = dfm.getFile("game");
+		Object file = dfm.getFile("game");
 
-		XMLManager m = DatafilesManager.getInstance().getXmlManager();
-
-		return (int) m.getParam(controls, "height", 20);
+		return (int) xmlManager.getParam(file, "height", 20);
 	}
 
 	public static int getMultiKey() {
 
-		DatafilesManager dfm = DatafilesManager.getInstance();
-		Object controls = dfm.getFile("controls");
+		Object file = dfm.getFile("controls");
 
-		XMLManager m = DatafilesManager.getInstance().getXmlManager();
-
-		return (int) m.getParam(controls, "multiKey", 65);
+		return (int) xmlManager.getParam(file, "multiKey", 65);
 	}
 
 	public static int getWidth() {
 
-		DatafilesManager dfm = DatafilesManager.getInstance();
-		Object controls = dfm.getFile("game");
+		Object file = dfm.getFile("game");
 
-		XMLManager m = DatafilesManager.getInstance().getXmlManager();
-
-		return (int) m.getParam(controls, "width", 20);
+		return (int) xmlManager.getParam(file, "width", 20);
 	}
 
-	public static void setBestScore(long newValue) {
-
+	public static boolean isUsingDensity() {
 		DatafilesManager dfm = DatafilesManager.getInstance();
+		Object file = dfm.getFile("game");
+
+		return (boolean) xmlManager.getParam(file, "useDensityInsteadOfAbsolute", true);
+	}
+
+	public static void setBestScore(int width, int height, int bombs, long newValue) {
+
 		Object score = dfm.getFile("score");
 
-		XMLManager m = DatafilesManager.getInstance().getXmlManager();
+		String paramName = Encoder.encode(width + " " + height + " " + bombs, ENCODE_KEY);
 
-		m.setParam(score, "bestScore", Encoder.encode((int) newValue, ENCODE_KEY));
-		m.saveFile(score);
+		xmlManager.setParam(score, paramName, Encoder.encode((int) newValue, ENCODE_KEY));
+		xmlManager.saveFile(score);
 	}
 }

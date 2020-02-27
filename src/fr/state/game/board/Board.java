@@ -161,6 +161,8 @@ public class Board {
 
 	private boolean gameOver;
 
+	private int bestCurrentScore;
+
 	private Map<Integer, Tile.Actions> mouseActions;
 	private Map<Integer, Tile.Actions> keyboardActions;
 
@@ -170,6 +172,7 @@ public class Board {
 		this.full = true;
 		this.nbOfFlags = 0;
 		this.startingTime = 0;
+		this.bestCurrentScore = 0;
 		this.createActions();
 	}
 
@@ -246,6 +249,8 @@ public class Board {
 		this.tileSize = tileSize;
 		this.nbOfBombs = nbOfBombs;
 
+		this.bestCurrentScore = ConfGame.getBestScore(sizeTile.ix(), sizeTile.iy(), nbOfBombs);
+
 		this.size = this.sizeTile.clone().mult(this.tileSize)
 				.add(this.sizeTile.clone().sub(new Point(1, 1)).mult(spaceBetween));
 
@@ -278,6 +283,10 @@ public class Board {
 
 	private void gameOver() {
 		this.gameOver = true;
+	}
+
+	public int getBestCurrentScore() {
+		return this.bestCurrentScore;
 	}
 
 	private int getFlagsAround(Tile tile) {
@@ -476,11 +485,12 @@ public class Board {
 			}
 		}
 
-		if (this.uncoveredTiles == this.nbOfTiles - this.nbOfBombs) {
+		if (this.finished == false && this.uncoveredTiles == this.nbOfTiles - this.nbOfBombs) {
 			this.finished = true;
-			long score = (System.currentTimeMillis() - this.startingTime) / 1000;
-			if (score < ConfGame.getBestScore()) {
-				ConfGame.setBestScore(score);
+			int score = (int) ((System.currentTimeMillis() - this.startingTime) / 1000);
+			if (score < this.bestCurrentScore || this.bestCurrentScore == -1) {
+				this.bestCurrentScore = score;
+				ConfGame.setBestScore(this.sizeTile.ix(), this.sizeTile.iy(), this.nbOfBombs, score);
 			}
 		}
 	}

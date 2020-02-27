@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><conf>
-
-    <!-- Game -->
-
-    <param name="bombes" type="integer" value="10"/>
-
-    <param name="width" type="integer" value="25"/>
-
-    <param name="height" type="integer" value="20"/>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+  <!-- Game -->
+  <param name="useDensityInsteadOfAbsolute" type="boolean" value="true"/>
+  <!-- Difficulty : easy = 0.125 | medium = 0.158730 | hard = 0.20625 -->
+  <param name="bombsDensity" type="double" value="0.125"/>
+  <param name="bombs" type="integer" value="83"/>
+  <param name="width" type="integer" value="25"/>
+  <param name="height" type="integer" value="20"/>
 </conf>

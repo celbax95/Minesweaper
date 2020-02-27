@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -61,13 +62,36 @@ public class XMLManagerDOM implements XMLManager {
 	 */
 	public XMLManagerDOM() {
 		try {
-			this.builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			this.transformer = TransformerFactory.newInstance().newTransformer();
+			DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+			this.builder = dFactory.newDocumentBuilder();
+
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			tFactory.setAttribute("indent-number", 2);
+			this.transformer = tFactory.newTransformer();
+			this.transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			this.transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			this.transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes");
 		} catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		this.xpath = XPathFactory.newInstance().newXPath();
+	}
+
+	public void createParam(Object doc, String paramName, Object value) {
+		assert value instanceof Integer || value instanceof Double || value instanceof Boolean
+				|| value instanceof String;
+
+		Document document = (Document) doc;
+
+		Element newParam = document.createElement("param");
+
+		newParam.setAttribute("name", paramName);
+		newParam.setAttribute("type", value.getClass().getSimpleName().toLowerCase());
+		newParam.setAttribute("value", value.toString());
+
+		((Node) this.getRoot(doc)).appendChild(newParam);
+
 	}
 
 	/**
@@ -80,8 +104,10 @@ public class XMLManagerDOM implements XMLManager {
 	private Object dynamicCast(String value, String type) {
 		switch (type.toLowerCase()) {
 		case "integer":
+		case "long":
 			return Integer.valueOf(value);
-		case "number":
+		case "double":
+		case "float":
 			return Double.valueOf(value);
 		case "boolean":
 			return Boolean.valueOf(value);
@@ -224,10 +250,26 @@ public class XMLManagerDOM implements XMLManager {
 		return oa;
 	}
 
+	private void removeWhiteSpaces(Object doc) {
+		NodeList nl;
+		try {
+			nl = (NodeList) this.xpath.evaluate("//text()[normalize-space(.)='']", doc, XPathConstants.NODESET);
+
+			for (int i = 0; i < nl.getLength(); ++i) {
+				Node node = nl.item(i);
+				node.getParentNode().removeChild(node);
+			}
+		} catch (Exception e2) {
+			// e2.printStackTrace();
+		}
+	}
+
 	@Override
 	public void saveFile(Object doc) {
 
 		Document document = (Document) doc;
+
+		this.removeWhiteSpaces(doc);
 
 		DOMSource source = new DOMSource(((Document) doc).getDocumentElement());
 		StreamResult result = null;
@@ -249,7 +291,12 @@ public class XMLManagerDOM implements XMLManager {
 		assert newValue instanceof Integer || newValue instanceof Double || newValue instanceof Boolean
 				|| newValue instanceof String;
 
-		((Node) this.getNode(doc, "param", "name", paramName)).getAttributes().getNamedItem("value")
-				.setTextContent(String.valueOf(newValue));
+		Node existingNode = (Node) this.getNode(doc, "param", "name", paramName);
+
+		if (existingNode != null) {
+			existingNode.getAttributes().getNamedItem("value").setTextContent(String.valueOf(newValue));
+		} else {
+			this.createParam(doc, paramName, newValue);
+		}
 	}
 }

@@ -32,7 +32,13 @@ public class Game {
 
 		int height = ConfGame.getHeight();
 
-		int bombsAmount = ConfGame.getBombes();
+		int bombsAmount;
+
+		if (ConfGame.isUsingDensity()) {
+			bombsAmount = (int) Math.floor(width * height * ConfGame.getBombsDensity());
+		} else {
+			bombsAmount = ConfGame.getBombes();
+		}
 
 		this.board = new Board();
 		this.board.createBoard(
