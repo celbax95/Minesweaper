@@ -69,12 +69,17 @@ public class ConfInitializer {
 
 	}
 
+	private void initFonts() {
+		Fonts.loadFonts();
+	}
+
 	/**
 	 * Creation des elements a partir de la conf
 	 */
 	public void start() {
 
 		this.initConfFiles();
+		this.initFonts();
 
 		Window screen = this.windowInitializers(this.getWinConf());
 

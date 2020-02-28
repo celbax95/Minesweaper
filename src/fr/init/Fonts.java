@@ -18,7 +18,7 @@ public class Fonts {
 		}
 	};
 
-	private static void loadFonts() {
+	public static void loadFonts() {
 		try {
 			for (String fontName : FONTS) {
 				Font customFont = Font.createFont(Font.TRUETYPE_FONT,
