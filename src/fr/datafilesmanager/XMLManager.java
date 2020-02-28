@@ -90,13 +90,6 @@ public interface XMLManager {
 	Object getRoot(Object document);
 
 	/**
-	 * Sauvegarde un fichier precedement modifie
-	 *
-	 * @param doc : le fichier a sauvegarder
-	 */
-	void saveFile(Object doc);
-
-	/**
 	 * Change la valeur d'un parametre
 	 *
 	 * @param doc       : element depuis lequel on cherche le param

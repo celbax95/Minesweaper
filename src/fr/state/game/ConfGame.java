@@ -74,6 +74,6 @@ public class ConfGame {
 		String paramName = Encoder.encode(width + " " + height + " " + bombs, ENCODE_KEY);
 
 		xmlManager.setParam(score, paramName, Encoder.encode((int) newValue, ENCODE_KEY));
-		xmlManager.saveFile(score);
+		dfm.saveFile(score);
 	}
 }

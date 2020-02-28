@@ -1,7 +1,9 @@
 package fr.datafilesmanager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fr.logger.Logger;
@@ -38,13 +40,16 @@ public class DatafilesManager {
 	}
 
 	// Accesseur aux fichiers de configuration
-	private XMLManager xmlManager;
+	private XMLManagerBackend xmlManager;
 
 	// Fichiers sauvegardes
 	private Map<String, String> files;
 
+	private List<String> readOnlyFiles;
+
 	private DatafilesManager() {
 		this.files = new HashMap<>();
+		this.readOnlyFiles = new ArrayList<>();
 	}
 
 	/**
@@ -65,7 +70,9 @@ public class DatafilesManager {
 		}
 
 		if (this.xmlManager != null) {
-			this.xmlManager.saveFile(this.getFile(name));
+			if (!this.readOnlyFiles.contains(name)) {
+				this.xmlManager.saveFile(this.getFile(name));
+			}
 		} else {
 			Logger.warn(
 					"Pour une execution optimise, il est conseillé d'ajouter l'XML Manager avant d'ajouter les fichiers");
@@ -141,8 +148,24 @@ public class DatafilesManager {
 	 *
 	 * @param xmlReader : accesseur de XML a affecter
 	 */
-	public void init(XMLManager xmlReader) {
+	public void init(XMLManagerBackend xmlReader) {
 		this.xmlManager = xmlReader;
 		initialized = true;
+	}
+
+	public boolean isReadOnlyFile(String fileName) {
+		return this.readOnlyFiles.contains(fileName);
+	}
+
+	public void saveFile(Object document) {
+		this.xmlManager.saveFile(document);
+	}
+
+	public void setReadOnlyFile(String fileName, boolean state) {
+		if (state && !this.readOnlyFiles.contains(fileName)) {
+			this.readOnlyFiles.add(fileName);
+		} else if (!state && this.readOnlyFiles.contains(fileName)) {
+			this.readOnlyFiles.remove(fileName);
+		}
 	}
 }

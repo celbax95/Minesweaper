@@ -23,10 +23,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import fr.datafilesmanager.XMLManager;
+import fr.datafilesmanager.XMLManagerBackend;
 
 // TODO doc
-public class XMLManagerDOM implements XMLManager {
+public class XMLManagerDOM implements XMLManagerBackend {
 
 	/**
 	 * static Singleton instance.

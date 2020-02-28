@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <conf>
     <!-- Window parameters -->
-    <param name="width" type="integer" value="1000"/>
+    <param name="width" type="integer" value="800"/>
     <param name="height" type="integer" value="720"/>
     <param name="marginTop" type="integer" value="0"/>
     <param name="marginBottom" type="integer" value="0"/>

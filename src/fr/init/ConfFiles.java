@@ -3,7 +3,9 @@ package fr.init;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fr.datafilesmanager.DatafilesManager;
@@ -22,7 +24,18 @@ public class ConfFiles {// String name, String path
 		}
 	};
 
+	private static final List<String> READ_ONLY_FILES = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			this.add("winconf");
+		}
+	};
+
 	private static void addConfFiles(DatafilesManager dfm) {
+		for (String name : READ_ONLY_FILES) {
+			dfm.setReadOnlyFile(name, true);
+		}
+
 		for (String name : FILES.keySet()) {
 			dfm.addFile(name, DIR_NAME + FILES.get(name));
 		}
@@ -35,6 +48,11 @@ public class ConfFiles {// String name, String path
 
 		for (String name : FILES.keySet()) {
 			try {
+
+				if (READ_ONLY_FILES.contains(name)) {
+					continue;
+				}
+
 				String path = DIR_NAME + FILES.get(name);
 
 				File f = new File(path);
