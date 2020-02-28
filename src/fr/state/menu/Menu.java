@@ -2,9 +2,11 @@ package fr.state.menu;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import fr.inputs.Input;
 import fr.inputs.keyboard.KeyboardEvent;
+import fr.util.widgets.Widget;
 import fr.util.widgets.WidgetHolder;
 import fr.window.WinData;
 
@@ -32,7 +34,8 @@ public class Menu extends WidgetHolder {
 	}
 
 	@Override
-	public void createWidgets() {
+	public List<Widget> createWidgets(List<Widget> widgets) {
+		return widgets;
 	}
 
 	@Override

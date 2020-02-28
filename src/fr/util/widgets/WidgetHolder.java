@@ -1,6 +1,7 @@
 package fr.util.widgets;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.imagesmanager.ImageLoader;
@@ -14,17 +15,16 @@ public abstract class WidgetHolder {
 		public String holderName;
 	}
 
-	private static boolean initialized = false;
-
-	private static void initStaticData(Data d) {
-
-	}
-
 	private boolean loaded;
 
 	private List<Widget> widgets;
 
-	public abstract void createWidgets();
+	protected WidgetHolder() {
+		this.loaded = false;
+		this.widgets = new ArrayList<>();
+	}
+
+	public abstract List<Widget> createWidgets(List<Widget> widgets);
 
 	public abstract void draw(Graphics2D g);
 
@@ -41,7 +41,7 @@ public abstract class WidgetHolder {
 	private void load(Data d) {
 		this.loadResources(d);
 
-		this.createWidgets();
+		this.widgets = this.createWidgets(this.widgets);
 
 		this.loaded = true;
 	}
@@ -71,5 +71,9 @@ public abstract class WidgetHolder {
 		il.load(d.resources, resPaths);
 	}
 
-	public abstract void update(Input input);
+	public void update(Input input) {
+		for (Widget w : this.widgets) {
+			w.update(input);
+		}
+	}
 }
