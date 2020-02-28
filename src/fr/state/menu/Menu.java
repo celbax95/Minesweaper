@@ -5,9 +5,22 @@ import java.awt.event.KeyEvent;
 
 import fr.inputs.Input;
 import fr.inputs.keyboard.KeyboardEvent;
+import fr.util.widgets.WidgetHolder;
 import fr.window.WinData;
 
-public class Menu {
+public class Menu extends WidgetHolder {
+
+	private static final Data data = new Data() {
+		{
+			this.holderName = "menu";
+
+			this.resScheme = "/resources/menu/" + this.holderName + "/*.png";
+
+			this.resources = new String[] {
+
+			};
+		}
+	};
 
 	private MenuState state;
 
@@ -18,7 +31,17 @@ public class Menu {
 		this.winData = wd;
 	}
 
+	@Override
+	public void createWidgets() {
+	}
+
+	@Override
 	public void draw(Graphics2D g) {
+	}
+
+	@Override
+	public Data getData() {
+		return data;
 	}
 
 	public MenuState getState() {
@@ -29,6 +52,7 @@ public class Menu {
 		this.state = state;
 	}
 
+	@Override
 	public void update(Input input) {
 		for (KeyboardEvent e : input.keyboardEvents) {
 			if (e.key == KeyEvent.VK_ESCAPE) {
