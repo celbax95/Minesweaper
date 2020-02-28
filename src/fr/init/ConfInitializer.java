@@ -1,9 +1,14 @@
 package fr.init;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.datafilesmanager.DatafilesManager;
 import fr.datafilesmanager.XMLManager;
 import fr.state.game.GameState;
+import fr.state.menu.MenuState;
 import fr.statepanel.AppStateManager;
+import fr.statepanel.IAppState;
 import fr.statepanel.StatePanel;
 import fr.util.point.Point;
 import fr.window.WinData;
@@ -11,6 +16,16 @@ import fr.window.Window;
 import fr.xmlmanager.XMLManagerDOM;
 
 public class ConfInitializer {
+
+	private static final String startingState = "menu";
+
+	private static final List<IAppState> states = new ArrayList<IAppState>() {
+		private static final long serialVersionUID = 1L;
+		{
+			this.add(new GameState());
+			this.add(new MenuState());
+		}
+	};
 
 	// Fichiers de configuration
 	private DatafilesManager dfm;
@@ -99,9 +114,14 @@ public class ConfInitializer {
 		mainPanel.init(winData);
 
 		final AppStateManager stator = new AppStateManager();
-		stator.addState(new GameState());
+
+		// register states
+		for (IAppState state : states) {
+			stator.addState(state);
+		}
+
 		stator.setStatable(mainPanel);
-		stator.applyState("game");
+		stator.applyState(startingState);
 
 		screen.init(mainPanel, winData);
 
