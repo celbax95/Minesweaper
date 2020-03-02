@@ -30,12 +30,19 @@ public class BorderData {
 		if (other == null)
 			return;
 		this.setThickness(other.thickness);
-		this.setColor(new Color(other.color.getRed(), other.color.getGreen(), other.color.getBlue(),
-				other.color.getAlpha()));
+		this.setColor(
+				new Color(other.color.getRed(), other.color.getGreen(), other.color.getBlue(), other.color.getAlpha()));
 		this.setState(other.state);
 		this.lock = false;
 	}
 
+	/**
+	 * @param thickness
+	 * @param color
+	 * @param state
+	 *
+	 *                  state = 0 : Inner state = 1 : Outer
+	 */
 	public BorderData(int thickness, Color color, int state) {
 		this();
 		this.setThickness(thickness);
@@ -57,8 +64,8 @@ public class BorderData {
 
 		switch (this.state) {
 		case 0:
-			Area a0 = new Area(new Rectangle(holderPos.ix() - 1, holderPos.iy() - 1, holderSize.ix() + 2,
-					holderSize.iy() + 2));
+			Area a0 = new Area(
+					new Rectangle(holderPos.ix() - 1, holderPos.iy() - 1, holderSize.ix() + 2, holderSize.iy() + 2));
 
 			Area b0 = new Area(new Rectangle(holderPos.ix() + this.thickness, holderPos.iy() + this.thickness,
 					holderSize.ix() - this.thickness * 2, holderSize.iy() - this.thickness * 2));
@@ -71,8 +78,7 @@ public class BorderData {
 			Area a1 = new Area(new Rectangle(holderPos.ix() - this.thickness, holderPos.iy() - this.thickness,
 					holderSize.ix() + this.thickness * 2, holderSize.iy() + this.thickness * 2));
 
-			Area b1 = new Area(
-					new Rectangle(holderPos.ix(), holderPos.iy(), holderSize.ix(), holderSize.iy()));
+			Area b1 = new Area(new Rectangle(holderPos.ix(), holderPos.iy(), holderSize.ix(), holderSize.iy()));
 
 			a1.subtract(b1);
 
@@ -124,6 +130,8 @@ public class BorderData {
 
 	/**
 	 * @param state the state to set
+	 *
+	 *              state = 0 : Inner state = 1 : Outer
 	 */
 	public void setState(int state) {
 		if (this.lock) {

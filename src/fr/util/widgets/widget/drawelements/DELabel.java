@@ -33,7 +33,7 @@ public class DELabel implements DrawElement {
 			return;
 		this.setPos(new Point(other.pos));
 		this.setLabel(other.label == null ? null : other.label.clone());
-		this.supBound = other.supBound.clone();
+		this.supBound = other.supBound == null ? null : other.supBound.clone();
 		this.lock = false;
 	}
 

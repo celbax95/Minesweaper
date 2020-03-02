@@ -51,12 +51,17 @@ public class TextData {
 	 * @param text
 	 * @param color
 	 * @param state
+	 *
+	 *              state = 0 : Relative</br>
+	 *              state = 1 : X centered</br>
+	 *              state = 2 : Y centered</br>
+	 *              state = 3 : Centered
 	 */
 	public TextData(Point pos, Font font, String text, Color color, int state) {
 		this();
 		this.setPos(pos);
-		this.setFont(font);
 		this.setText(text);
+		this.setFont(font);
 		this.setColor(color);
 		this.setState(state);
 	}
@@ -68,7 +73,7 @@ public class TextData {
 		this.setPos(new Point(other.pos));
 		this.setSize(new Point(other.size));
 
-		this.font = new Font(other.font.getFamily(), other.font.getStyle(), other.font.getSize());
+		this.font = new Font(other.font.getAttributes());
 		this.setText(new String(other.text));
 		this.setColor(
 				new Color(other.color.getRed(), other.color.getGreen(), other.color.getBlue(), other.color.getAlpha()));
@@ -227,6 +232,11 @@ public class TextData {
 
 	/**
 	 * @param state the state to set
+	 *
+	 *              state = 0 : Relative</br>
+	 *              state = 1 : X centered</br>
+	 *              state = 2 : Y centered</br>
+	 *              state = 3 : Centered
 	 */
 	public void setState(int state) {
 		if (this.lock) {
