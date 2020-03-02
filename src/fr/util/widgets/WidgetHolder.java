@@ -28,6 +28,12 @@ public abstract class WidgetHolder {
 
 	public abstract void draw(Graphics2D g);
 
+	public void drawWidgets(Graphics2D g) {
+		for (Widget w : this.widgets) {
+			w.draw(g);
+		}
+	}
+
 	public abstract Data getData();
 
 	public boolean isLoaded() {
@@ -71,7 +77,9 @@ public abstract class WidgetHolder {
 		il.load(d.resources, resPaths);
 	}
 
-	public void update(Input input) {
+	public abstract void update(Input input);
+
+	public void updateWidgets(Input input) {
 		for (Widget w : this.widgets) {
 			w.update(input);
 		}
