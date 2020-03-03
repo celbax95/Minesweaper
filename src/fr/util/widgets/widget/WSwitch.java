@@ -344,7 +344,6 @@ public abstract class WSwitch implements Widget {
 			return;
 
 		for (MouseEvent e : input.mouseEvents) {
-			System.out.println(this.hitbox);
 			switch (e.id) {
 			case MouseEvent.LEFT_PRESSED:
 				if (this.enabled && Collider.AABBvsPoint(this.hitbox, e.pos)) {
