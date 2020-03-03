@@ -8,8 +8,8 @@ import fr.logger.Logger;
 import fr.util.collider.AABB;
 import fr.util.collider.Collider;
 import fr.util.point.Point;
-import fr.util.widgets.WidgetHolder;
 import fr.util.widgets.Widget;
+import fr.util.widgets.WidgetHolder;
 
 public abstract class WSwitch implements Widget {
 	private Point pos;
@@ -69,9 +69,9 @@ public abstract class WSwitch implements Widget {
 		this.setOffDrawElement(other.off == null ? null : other.off.clone());
 		this.setPressedOffDrawElement(other.pressedOff == null ? null : other.pressedOff.clone());
 
-		AABB hb = new AABB(this.pos, new Point(), new Point());
-		hb.min(new Point(other.hitbox.min()));
-		hb.max(new Point(other.hitbox.max()));
+		this.hitbox = new AABB(this.pos, new Point(), new Point());
+		this.hitbox.min(new Point(other.hitbox.min()));
+		this.hitbox.max(new Point(other.hitbox.max()));
 
 		this.setEnabled(other.enabled);
 
@@ -344,6 +344,7 @@ public abstract class WSwitch implements Widget {
 			return;
 
 		for (MouseEvent e : input.mouseEvents) {
+			System.out.println(this.hitbox);
 			switch (e.id) {
 			case MouseEvent.LEFT_PRESSED:
 				if (this.enabled && Collider.AABBvsPoint(this.hitbox, e.pos)) {
