@@ -27,20 +27,22 @@ public abstract class WExclusiveSwitchs implements Widget {
 
 		@Override
 		public void actionOff() {
-			if (WExclusiveSwitchs.this.canNoSelect || WExclusiveSwitchs.this.selectedSwitch.getName() != this.name) {
-				WExclusiveSwitchs.this.selectedChanged(this.name, false);
-			} else {
-				this.setActive(true);
+			WExclusiveSwitchs.this.selectedChanged(this.name, false);
+			if (WExclusiveSwitchs.this.selectedSwitch == this) {
+				WExclusiveSwitchs.this.selectedSwitch = null;
+				this.setEnabled(true);
 			}
 		}
 
 		@Override
 		public void actionOn() {
 			if (WExclusiveSwitchs.this.selectedSwitch != null) {
-				WExclusiveSwitchs.this.selectedSwitch.setEnabled(false);
+				WExclusiveSwitchs.this.selectedSwitch.setEnabled(!WExclusiveSwitchs.this.canNoSelect);
+				WExclusiveSwitchs.this.selectedSwitch.setActive(false);
 			}
 
 			WExclusiveSwitchs.this.selectedSwitch = this;
+			WExclusiveSwitchs.this.selectedSwitch.setEnabled(WExclusiveSwitchs.this.canNoSelect);
 
 			WExclusiveSwitchs.this.selectedChanged(this.name, true);
 		}
@@ -148,6 +150,8 @@ public abstract class WExclusiveSwitchs implements Widget {
 		this.canNoSelect = canNoSelect;
 		if (canNoSelect == false && this.switchList.size() != 0) {
 			this.switchList.get(0).setActive(true);
+		} else if (canNoSelect && this.selectedSwitch != null) {
+			this.selectedSwitch.setEnabled(true);
 		}
 	}
 
