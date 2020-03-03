@@ -14,4 +14,34 @@ public class ConfMenu {
 		dfm = DatafilesManager.getInstance();
 		xmlManager = DatafilesManager.getInstance().getXmlManager();
 	}
+
+	public static int getDifficulty() {
+
+		Object file = dfm.getFile("menu");
+
+		return (int) xmlManager.getParam(file, "difficulty", 0);
+	}
+
+	public static int getSize() {
+
+		Object file = dfm.getFile("menu");
+
+		return (int) xmlManager.getParam(file, "size", 0);
+	}
+
+	public static void setDifficulty(int difficulty) {
+
+		Object score = dfm.getFile("menu");
+
+		xmlManager.setParam(score, "difficulty", difficulty);
+		dfm.saveFile(score);
+	}
+
+	public static void setSize(int size) {
+
+		Object score = dfm.getFile("menu");
+
+		xmlManager.setParam(score, "size", size);
+		dfm.saveFile(score);
+	}
 }

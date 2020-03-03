@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+  <!-- Menu -->
+  <param name="difficulty" type="integer" value="0"/>
+  <!-- Difficulty : easy = 0 | normal = 1 | hard = 2 -->
+  <param name="size" type="integer" value="0"/>
+   <!-- Size : small = 0 | medium = 1 | large = 2 -->
+</conf>
