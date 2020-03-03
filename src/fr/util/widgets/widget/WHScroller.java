@@ -16,7 +16,7 @@ import fr.util.widgets.WidgetHolder;
 import fr.util.widgets.Widget;
 import fr.util.widgets.widget.drawelements.DERectangle;
 
-public class WScroller implements Widget {
+public class WHScroller implements Widget {
 
 	private class ScrollWidget implements Widget {
 		private Point originalPos;
@@ -121,7 +121,7 @@ public class WScroller implements Widget {
 
 	private boolean displayScrollBar;
 
-	public WScroller(WidgetHolder page) {
+	public WHScroller(WidgetHolder page) {
 		this.pos = new Point();
 		this.size = new Point();
 		this.scrollPoint = 0;
@@ -141,7 +141,7 @@ public class WScroller implements Widget {
 		this.scrollBar = new WVSlider(page) {
 			@Override
 			public void valueChanged(int value, boolean pressed) {
-				WScroller.this.changeByBar(value);
+				WHScroller.this.changeByBar(value);
 			}
 		};
 
@@ -474,10 +474,10 @@ public class WScroller implements Widget {
 					continue;
 				case MouseEvent.WHEEL_UP:
 					oldScroll = this.scrollPoint;
-					if (this.scrollPoint - this.scrollStep >= WScroller.MIN_SCROLL) {
+					if (this.scrollPoint - this.scrollStep >= WHScroller.MIN_SCROLL) {
 						this.scrollPoint -= this.scrollStep;
 					} else {
-						this.scrollPoint = WScroller.MIN_SCROLL;
+						this.scrollPoint = WHScroller.MIN_SCROLL;
 					}
 					if (oldScroll != this.scrollPoint) {
 						this.scrollChanged();
