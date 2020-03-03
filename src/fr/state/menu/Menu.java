@@ -7,15 +7,18 @@ import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import fr.imagesmanager.ImageManager;
 import fr.inputs.Input;
 import fr.inputs.keyboard.KeyboardEvent;
 import fr.util.point.Point;
 import fr.util.widgets.Widget;
 import fr.util.widgets.WidgetHolder;
 import fr.util.widgets.widget.WElement;
+import fr.util.widgets.widget.WExclusiveSwitchs;
+import fr.util.widgets.widget.WSwitch;
 import fr.util.widgets.widget.data.TextData;
+import fr.util.widgets.widget.drawelements.DEImage;
 import fr.util.widgets.widget.drawelements.DELabel;
 import fr.window.WinData;
 
@@ -50,21 +53,78 @@ public class Menu extends WidgetHolder {
 		this.load();
 	}
 
-	private Widget createTitle() {
-		WElement title = new WElement(this);
+	public WSwitch createSwitch(String name, Point pos) {
+		WSwitch w = new WSwitch(this) {
+			@Override
+			public void actionOff() {
+			}
 
-		Map<TextAttribute, Object> attributes = new HashMap<TextAttribute, Object>() {
+			@Override
+			public void actionOn() {
+			}
+		};
+
+		ImageManager im = ImageManager.getInstance();
+
+		Font font = new Font(new HashMap<TextAttribute, Object>() {
 			private static final long serialVersionUID = 1L;
 			{
 				this.put(TextAttribute.TRACKING, 0.02);
+				this.put(TextAttribute.FAMILY, "Tw Cen MT");
+				this.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+				this.put(TextAttribute.SIZE, 40);
+			}
+		});
+
+		TextData label = new TextData(new Point(), font, name, new Color(230, 230, 230), 3);
+
+		DEImage i = new DEImage(new Point(), im.get("button"), null, label);
+
+		w.setOffDrawElement(i);
+
+		i = (DEImage) i.clone();
+		i.setImage(im.get("button_pressed"));
+
+		w.setPressedOffDrawElement(i);
+		w.setPressedOnDrawElement(i);
+
+		i = (DEImage) i.clone();
+		i.setImage(im.get("button_selected"));
+
+		w.setOnDrawElement(i);
+
+		w.setPos(pos);
+
+		w.setHitboxFromDrawElement();
+
+		return w;
+	}
+
+	public Widget createSwitchs() {
+		WExclusiveSwitchs es = new WExclusiveSwitchs(this) {
+			@Override
+			public void selectedChanged(String selected, boolean state) {
+			}
+		};
+
+		es.add("small", this.createSwitch("SMALL", new Point(80, 180)));
+		es.add("medium", this.createSwitch("MEDIUM", new Point(80, 280)));
+
+		return es;
+	}
+
+	private Widget createTitle() {
+		WElement title = new WElement(this);
+
+		Font font = new Font(new HashMap<TextAttribute, Object>() {
+			private static final long serialVersionUID = 1L;
+			{
 				this.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
 				this.put(TextAttribute.FAMILY, "Tw Cen MT");
 				this.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
 				this.put(TextAttribute.SIZE, 88);
 			}
-		};
-
-		Font font = new Font(attributes);
+		});
 
 		TextData td = new TextData(new Point(), font, TITLE, new Color(230, 230, 230), 1);
 
@@ -81,6 +141,8 @@ public class Menu extends WidgetHolder {
 	public List<Widget> createWidgets(List<Widget> widgets) {
 
 		widgets.add(this.createTitle());
+
+		widgets.add(this.createSwitchs());
 
 		return widgets;
 	}
