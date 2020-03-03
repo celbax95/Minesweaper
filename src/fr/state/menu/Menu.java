@@ -13,6 +13,7 @@ import fr.inputs.Input;
 import fr.inputs.keyboard.KeyboardEvent;
 import fr.statepanel.IAppState;
 import fr.statepanel.StatePanel;
+import fr.util.DualMap;
 import fr.util.point.Point;
 import fr.util.widgets.Widget;
 import fr.util.widgets.WidgetHolder;
@@ -44,6 +45,30 @@ public class Menu extends WidgetHolder {
 	};
 
 	private static final String TITLE = "MINESWEAPER";
+
+	private static final DualMap<String, Integer> SIZES;
+	private static final DualMap<String, Integer> DIFFICULTIES;
+
+	static {
+		SIZES = new DualMap<String, Integer>() {
+			private static final long serialVersionUID = 1L;
+			{
+				int i = 0;
+				this.putForward("small", i++);
+				this.putForward("medium", i++);
+				this.putForward("large", i++);
+			}
+		};
+		DIFFICULTIES = new DualMap<String, Integer>() {
+			private static final long serialVersionUID = 1L;
+			{
+				int i = 0;
+				this.putForward("easy", i++);
+				this.putForward("normal", i++);
+				this.putForward("hard", i++);
+			}
+		};
+	}
 
 	private MenuState state;
 
@@ -96,6 +121,10 @@ public class Menu extends WidgetHolder {
 
 		es.setCanNoSelect(false);
 
+		int difficulty = ConfMenu.getDifficulty();
+		if (DIFFICULTIES.containsBackwardKey(difficulty)) {
+			es.setSelected(DIFFICULTIES.getBackward(difficulty), true);
+		}
 		return es;
 	}
 
@@ -147,9 +176,14 @@ public class Menu extends WidgetHolder {
 
 		es.add("small", this.createSwitch("SMALL", new Point(192, 222)));
 		es.add("medium", this.createSwitch("MEDIUM", new Point(192, 310)));
-		es.add("large", this.createSwitch("MEDIUM", new Point(192, 398)));
+		es.add("large", this.createSwitch("LARGE", new Point(192, 398)));
 
 		es.setCanNoSelect(false);
+
+		int size = ConfMenu.getSize();
+		if (SIZES.containsBackwardKey(size)) {
+			es.setSelected(SIZES.getBackward(size), true);
+		}
 
 		return es;
 	}
