@@ -21,6 +21,7 @@ public abstract class WExclusiveSwitchs implements Widget {
 
 		public GroupableSwitch(String name, WSwitch other) {
 			super(other);
+			name = name.toLowerCase();
 			this.name = name;
 			this.originalPos = other.getPos().clone();
 		}
@@ -85,6 +86,7 @@ public abstract class WExclusiveSwitchs implements Widget {
 	}
 
 	public void add(String name, WSwitch w) {
+		name = name.toLowerCase();
 		if (w != null && !this.switchMap.containsKey(name)) {
 			Point wPos = w.getPos().clone();
 			wPos.add(this.pos);
@@ -135,6 +137,7 @@ public abstract class WExclusiveSwitchs implements Widget {
 	}
 
 	public void remove(String name) {
+		name = name.toLowerCase();
 		if (this.switchMap.containsKey(name)) {
 			this.switchList.remove((int) this.switchMap.get(name));
 			this.switchMap.remove(name);
@@ -175,7 +178,7 @@ public abstract class WExclusiveSwitchs implements Widget {
 	}
 
 	public void setSelected(String name, boolean state) {
-
+		name = name.toLowerCase();
 		if (this.canNoSelect == false && state == false && this.selectedSwitch != null
 				&& this.selectedSwitch.getName() == name)
 			return;
