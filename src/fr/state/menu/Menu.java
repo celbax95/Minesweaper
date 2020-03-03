@@ -14,6 +14,7 @@ import fr.inputs.keyboard.KeyboardEvent;
 import fr.util.point.Point;
 import fr.util.widgets.Widget;
 import fr.util.widgets.WidgetHolder;
+import fr.util.widgets.widget.WButton;
 import fr.util.widgets.widget.WElement;
 import fr.util.widgets.widget.WExclusiveSwitchs;
 import fr.util.widgets.widget.WSwitch;
@@ -53,6 +54,32 @@ public class Menu extends WidgetHolder {
 		this.load();
 	}
 
+	public Widget createBestLabel() {
+		WElement w = new WElement(this);
+
+		ImageManager im = ImageManager.getInstance();
+
+		Font font = new Font(new HashMap<TextAttribute, Object>() {
+			private static final long serialVersionUID = 1L;
+			{
+				this.put(TextAttribute.TRACKING, 0.02);
+				this.put(TextAttribute.FAMILY, "Tw Cen MT");
+				this.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+				this.put(TextAttribute.SIZE, 40);
+			}
+		});
+
+		TextData label = new TextData(new Point(), font, "Best : 999", new Color(230, 230, 230), 3);
+
+		DEImage i = new DEImage(new Point(), im.get("largeButton"), null, label);
+
+		w.setDrawElement(i);
+
+		w.setPos(new Point(82, 542));
+
+		return w;
+	}
+
 	public Widget createDifficultySwitchs() {
 		WExclusiveSwitchs es = new WExclusiveSwitchs(this) {
 			@Override
@@ -68,6 +95,41 @@ public class Menu extends WidgetHolder {
 		es.setCanNoSelect(false);
 
 		return es;
+	}
+
+	public Widget createPlayButton() {
+		WButton w = new WButton(this) {
+			@Override
+			public void action() {
+			}
+		};
+
+		ImageManager im = ImageManager.getInstance();
+
+		Font font = new Font(new HashMap<TextAttribute, Object>() {
+			private static final long serialVersionUID = 1L;
+			{
+				this.put(TextAttribute.TRACKING, 0.035);
+				this.put(TextAttribute.FAMILY, "Tw Cen MT");
+				this.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+				this.put(TextAttribute.SIZE, 50);
+			}
+		});
+
+		TextData label = new TextData(new Point(), font, "PLAY", new Color(230, 230, 230), 3);
+
+		DEImage i = new DEImage(new Point(), im.get("largeButton"), null, label);
+		w.setStdDrawElement(i);
+
+		i = (DEImage) i.clone();
+		i.setImage(im.get("largeButton_pressed"));
+		w.setPressedDrawElement(i);
+
+		w.setHitboxFromDrawElement();
+
+		w.setPos(new Point(456, 542));
+
+		return w;
 	}
 
 	public Widget createSizeSwitchs() {
@@ -165,6 +227,9 @@ public class Menu extends WidgetHolder {
 
 		widgets.add(this.createSizeSwitchs());
 		widgets.add(this.createDifficultySwitchs());
+
+		widgets.add(this.createBestLabel());
+		widgets.add(this.createPlayButton());
 
 		return widgets;
 	}
