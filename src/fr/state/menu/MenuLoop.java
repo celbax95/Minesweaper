@@ -8,13 +8,19 @@ public class MenuLoop implements Runnable {
 
 	public MenuLoop(MenuState state) {
 		this.loop = new Thread(this);
+		this.loop.setName("MenuLoop/loop");
 		this.state = state;
 	}
 
 	@Override
 	public void run() {
-		while (!this.loop.isInterrupted()) {
+		while (true) {
 			synchronized (this) {
+
+				if (this.loop.isInterrupted()) {
+					break;
+				}
+
 				try {
 					this.state.getInput();
 
@@ -24,9 +30,8 @@ public class MenuLoop implements Runnable {
 
 					Thread.sleep(32);
 				} catch (InterruptedException | NullPointerException e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 					Thread.currentThread().interrupt();
-					System.exit(0);
 				}
 			}
 		}

@@ -110,18 +110,17 @@ public class ConfInitializer {
 		final Window screen = new Window();
 		final StatePanel mainPanel = new StatePanel(screen);
 		final WinData winData = this.getWinData(winConf);
-
-		mainPanel.init(winData);
-
-		final AppStateManager stator = new AppStateManager();
+		final AppStateManager asm = new AppStateManager();
 
 		// register states
 		for (IAppState state : states) {
-			stator.addState(state);
+			asm.addState(state);
 		}
 
-		stator.setStatable(mainPanel);
-		stator.applyState(startingState);
+		mainPanel.init(winData);
+		mainPanel.setAppStateManager(asm);
+
+		mainPanel.setState(asm.getState(startingState));
 
 		screen.init(mainPanel, winData);
 

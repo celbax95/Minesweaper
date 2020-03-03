@@ -11,6 +11,8 @@ import java.util.List;
 import fr.imagesmanager.ImageManager;
 import fr.inputs.Input;
 import fr.inputs.keyboard.KeyboardEvent;
+import fr.statepanel.IAppState;
+import fr.statepanel.StatePanel;
 import fr.util.point.Point;
 import fr.util.widgets.Widget;
 import fr.util.widgets.WidgetHolder;
@@ -101,6 +103,9 @@ public class Menu extends WidgetHolder {
 		WButton w = new WButton(this) {
 			@Override
 			public void action() {
+				StatePanel sp = Menu.this.state.getStatePanel();
+				IAppState nextState = sp.getAppStateManager().getState("game");
+				sp.setState(nextState);
 			}
 		};
 

@@ -2,6 +2,7 @@ package fr.state.menu;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Map;
 
 import fr.imagesmanager.ImageManager;
 import fr.inputs.Input;
@@ -41,6 +42,10 @@ public class MenuState implements IAppState {
 	}
 
 	@Override
+	public void setInitData(Map<String, Object> data) {
+	}
+
+	@Override
 	public void start(StatePanel panel) {
 		this.sp = panel;
 
@@ -65,6 +70,7 @@ public class MenuState implements IAppState {
 
 	@Override
 	public void stop() {
+		this.loop.stop();
 		this.sp.removeKeyboardListener(this.input.getKeyboardEventListener());
 		this.sp.removeKeyboardListener(this.input.getKeyboardMirrorListener());
 		this.sp.removeMouseListener(this.input.getMouseEventListener());
@@ -72,10 +78,10 @@ public class MenuState implements IAppState {
 		this.app = null;
 		this.sp = null;
 		this.input = null;
-		this.loop.stop();
 		this.loop = null;
 	}
 
+	@Override
 	public void update() {
 		this.app.update(this.input);
 	}

@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import fr.inputs.keyboard.Keyboard;
 import fr.inputs.mouse.Mouse;
+import fr.logger.Logger;
 import fr.util.point.Point;
 import fr.window.WinData;
 import fr.window.Window;
@@ -20,11 +21,13 @@ import fr.window.Window;
  *
  */
 @SuppressWarnings("serial")
-public class StatePanel extends JPanel implements Statable {
+public class StatePanel extends JPanel {
 
 	private Window window;
 
 	private WinData winData;
+
+	private AppStateManager appStateManager;
 
 	// Etat
 	private IAppState state;
@@ -47,6 +50,10 @@ public class StatePanel extends JPanel implements Statable {
 		super.addMouseListener(listner);
 		this.addMouseMotionListener(listner);
 		this.addMouseWheelListener(listner);
+	}
+
+	public AppStateManager getAppStateManager() {
+		return this.appStateManager;
 	}
 
 	/**
@@ -75,7 +82,7 @@ public class StatePanel extends JPanel implements Statable {
 		this.requestFocusInWindow();
 		this.setFocusTraversalKeysEnabled(false);
 
-		this.setSize(this.winData.getWindowSize().ix() + 9, this.winData.getWindowSize().iy() + 2);
+		this.setSize(this.winData.getWindowSize().ix(), this.winData.getWindowSize().iy());
 	}
 
 	@Override
@@ -114,13 +121,28 @@ public class StatePanel extends JPanel implements Statable {
 		this.removeMouseWheelListener(listner);
 	}
 
-	@Override
+	public void setAppStateManager(AppStateManager appStateManager) {
+		this.appStateManager = appStateManager;
+	}
+
 	public void setState(IAppState state) {
-		if (this.state != null) {
-			this.state.stop();
-		}
+
+		IAppState oldState = this.state;
+
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (oldState != null) {
+					oldState.stop();
+				}
+			}
+		});
+		thread.setName("StatePanel/oldStateStop");
+		thread.start();
 
 		this.state = state;
 		this.state.start(this);
+
+		Logger.inf("Application du state \"" + state.getName() + "\"");
 	}
 }
