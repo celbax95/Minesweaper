@@ -53,6 +53,40 @@ public class Menu extends WidgetHolder {
 		this.load();
 	}
 
+	public Widget createDifficultySwitchs() {
+		WExclusiveSwitchs es = new WExclusiveSwitchs(this) {
+			@Override
+			public void selectedChanged(String selected, boolean state) {
+				System.out.println(selected + " est " + (state ? "selectionne" : "deselectionne"));
+			}
+		};
+
+		es.add("easy", this.createSwitch("EASY", new Point(416, 222)));
+		es.add("normal", this.createSwitch("NORMAL", new Point(416, 310)));
+		es.add("hard", this.createSwitch("HARD", new Point(416, 398)));
+
+		es.setCanNoSelect(false);
+
+		return es;
+	}
+
+	public Widget createSizeSwitchs() {
+		WExclusiveSwitchs es = new WExclusiveSwitchs(this) {
+			@Override
+			public void selectedChanged(String selected, boolean state) {
+				System.out.println(selected + " est " + (state ? "selectionne" : "deselectionne"));
+			}
+		};
+
+		es.add("small", this.createSwitch("SMALL", new Point(192, 222)));
+		es.add("medium", this.createSwitch("MEDIUM", new Point(192, 310)));
+		es.add("large", this.createSwitch("MEDIUM", new Point(192, 398)));
+
+		es.setCanNoSelect(false);
+
+		return es;
+	}
+
 	public WSwitch createSwitch(String name, Point pos) {
 		WSwitch w = new WSwitch(this) {
 			@Override
@@ -100,19 +134,6 @@ public class Menu extends WidgetHolder {
 		return w;
 	}
 
-	public Widget createSwitchs() {
-		WExclusiveSwitchs es = new WExclusiveSwitchs(this) {
-			@Override
-			public void selectedChanged(String selected, boolean state) {
-			}
-		};
-
-		es.add("small", this.createSwitch("SMALL", new Point(80, 180)));
-		es.add("medium", this.createSwitch("MEDIUM", new Point(80, 280)));
-
-		return es;
-	}
-
 	private Widget createTitle() {
 		WElement title = new WElement(this);
 
@@ -142,7 +163,8 @@ public class Menu extends WidgetHolder {
 
 		widgets.add(this.createTitle());
 
-		widgets.add(this.createSwitchs());
+		widgets.add(this.createSizeSwitchs());
+		widgets.add(this.createDifficultySwitchs());
 
 		return widgets;
 	}
