@@ -6,7 +6,9 @@ import fr.datafilesmanager.XMLManager;
 
 public class ConfGame {
 
-	private static final int ENCODE_KEY = 983211;
+	private static final long KEY = 2921073625518553L;
+
+	private static final byte[] ENCODE_KEY;
 
 	private static DatafilesManager dfm;
 	private static XMLManager xmlManager;
@@ -14,6 +16,8 @@ public class ConfGame {
 	static {
 		dfm = DatafilesManager.getInstance();
 		xmlManager = DatafilesManager.getInstance().getXmlManager();
+
+		ENCODE_KEY = Encoder.getKey(KEY);
 	}
 
 	public static int getBestScore(int width, int height, int bombs) {
