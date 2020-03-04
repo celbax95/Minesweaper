@@ -278,9 +278,35 @@ public class Menu extends WidgetHolder {
 		this.drawWidgets(g);
 	}
 
+	private double getBombDensityFromConf(int difficulty) {
+		switch (difficulty) {
+		case 0:
+			return ConfMenu.getDifficultyEasy();
+		case 1:
+			return ConfMenu.getDifficultyNormal();
+		case 2:
+			return ConfMenu.getDifficultyHard();
+		default:
+			return 0;
+		}
+	}
+
 	@Override
 	public Data getData() {
 		return data;
+	}
+
+	private Point getSizeFromConf(int size) {
+		switch (size) {
+		case 0:
+			return ConfMenu.getSizeSmall();
+		case 1:
+			return ConfMenu.getSizeMedium();
+		case 2:
+			return ConfMenu.getSizeLarge();
+		default:
+			return new Point();
+		}
 	}
 
 	public MenuState getState() {

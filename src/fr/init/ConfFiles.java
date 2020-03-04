@@ -22,6 +22,7 @@ public class ConfFiles {// String name, String path
 			this.put("score", "score.xml");
 			this.put("game", "game.xml");
 			this.put("menu", "menu.xml");
+			this.put("gameData", "gameData.xml");
 		}
 	};
 
