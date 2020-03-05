@@ -69,6 +69,7 @@ public class XMLManagerDOM implements XMLManagerBackend {
 			tFactory.setAttribute("indent-number", 2);
 			this.transformer = tFactory.newTransformer();
 			this.transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			this.transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			this.transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			this.transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes");
 		} catch (Exception e) {
