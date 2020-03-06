@@ -15,6 +15,7 @@ import fr.statepanel.IAppState;
 import fr.statepanel.StatePanel;
 import fr.util.DualMap;
 import fr.util.point.Point;
+import fr.util.widgets.TextableWidget;
 import fr.util.widgets.Widget;
 import fr.util.widgets.WidgetHolder;
 import fr.util.widgets.widget.WButton;
@@ -43,6 +44,8 @@ public class Menu extends WidgetHolder {
 					"largeButton_pressed" };
 		}
 	};
+
+	private static final String BEST_SCORE_LABEL_SCHEME = "Best : X";
 
 	private static final String TITLE = "MINESWEAPER";
 
@@ -74,14 +77,24 @@ public class Menu extends WidgetHolder {
 
 	private WinData winData;
 
+	private TextableWidget bestScoreLabel;
+
+	private int size;
+	private double difficulty;
+
 	public Menu(MenuState state, WinData wd) {
 		this.state = state;
 		this.winData = wd;
 
+		this.size = 0;
+		this.difficulty = 0;
+
+		this.bestScoreLabel = null;
+
 		this.load();
 	}
 
-	public Widget createBestLabel() {
+	public WElement createBestLabel() {
 		WElement w = new WElement(this);
 
 		ImageManager im = ImageManager.getInstance();
@@ -112,6 +125,7 @@ public class Menu extends WidgetHolder {
 			@Override
 			public void selectedChanged(String selected, boolean state) {
 				System.out.println(selected + " est " + (state ? "selectionne" : "deselectionne"));
+				Menu.this.updateBestScoreLabel();
 			}
 		};
 
@@ -171,6 +185,7 @@ public class Menu extends WidgetHolder {
 			@Override
 			public void selectedChanged(String selected, boolean state) {
 				System.out.println(selected + " est " + (state ? "selectionne" : "deselectionne"));
+				Menu.this.updateBestScoreLabel();
 			}
 		};
 
@@ -264,10 +279,12 @@ public class Menu extends WidgetHolder {
 
 		widgets.add(this.createTitle());
 
+		this.bestScoreLabel = this.createBestLabel();
+		widgets.add(this.bestScoreLabel);
+
 		widgets.add(this.createSizeSwitchs());
 		widgets.add(this.createDifficultySwitchs());
 
-		widgets.add(this.createBestLabel());
 		widgets.add(this.createPlayButton());
 
 		return widgets;
@@ -326,5 +343,20 @@ public class Menu extends WidgetHolder {
 		}
 
 		this.updateWidgets(input);
+	}
+
+	public void updateBestScoreLabel() {
+
+		Point size = this.getSizeFromConf(this.size);
+
+		int bombs = (int) Math.floor(size.x * size.y * this.difficulty);
+
+		int score = ConfMenu.getBestScore(size.ix(), size.iy(), bombs);
+
+		String scoreLbl = BEST_SCORE_LABEL_SCHEME.replaceAll("X", score == -1 ? "None" : String.valueOf(score));
+
+		System.out.println(scoreLbl);
+
+		this.bestScoreLabel.setText(scoreLbl);
 	}
 }

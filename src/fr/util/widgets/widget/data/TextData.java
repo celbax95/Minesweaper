@@ -251,10 +251,6 @@ public class TextData {
 	 * @param text the text to set
 	 */
 	public void setText(String text) {
-		if (this.lock) {
-			this.lockWarn();
-			return;
-		}
 		assert text != null;
 		this.text = text;
 		this.setSize();

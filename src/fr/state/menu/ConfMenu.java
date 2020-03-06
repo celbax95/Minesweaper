@@ -1,12 +1,19 @@
 package fr.state.menu;
 
+import fr.datafilesmanager.Cryptor;
 import fr.datafilesmanager.DatafilesManager;
 import fr.datafilesmanager.XMLManager;
 import fr.util.point.Point;
 
 public class ConfMenu {
 
-	private static final int ENCODE_KEY = 983211;
+	private static final long KEY = 2921073625518553L;
+
+	private static final byte[] ENCODE_KEY;
+
+	private static final int SCRAMBLER = 3;
+
+	private static final Cryptor CRYPTOR;
 
 	private static DatafilesManager dfm;
 	private static XMLManager xmlManager;
@@ -14,6 +21,22 @@ public class ConfMenu {
 	static {
 		dfm = DatafilesManager.getInstance();
 		xmlManager = DatafilesManager.getInstance().getXmlManager();
+
+		CRYPTOR = Cryptor.getInstance();
+		CRYPTOR.setBase64Encoding(true);
+
+		ENCODE_KEY = CRYPTOR.getKey(KEY);
+	}
+
+	public static int getBestScore(int width, int height, int bombs) {
+
+		Object file = dfm.getFile("score");
+
+		CRYPTOR.setScrambler(0);
+		String paramName = CRYPTOR.encrypt(width + " " + height + " " + bombs, ENCODE_KEY);
+
+		CRYPTOR.setScrambler(SCRAMBLER);
+		return CRYPTOR.decrypt(xmlManager.getParam(file, paramName, 0).toString(), -1, ENCODE_KEY);
 	}
 
 	public static int getDifficulty() {
