@@ -9,11 +9,11 @@ import fr.logger.Logger;
 import fr.util.collider.AABB;
 import fr.util.collider.Collider;
 import fr.util.point.Point;
+import fr.util.widgets.TextableWidget;
 import fr.util.widgets.WidgetHolder;
-import fr.util.widgets.Widget;
 import fr.util.widgets.widget.data.TextData;
 
-public abstract class WUserInput implements Widget {
+public abstract class WUserInput implements TextableWidget {
 	private final int PADDING = 10;
 	private final int MIN_FONT_SIZE = 10;
 
@@ -191,6 +191,11 @@ public abstract class WUserInput implements Widget {
 		return this.stdDrawElement;
 	}
 
+	@Override
+	public String getText() {
+		return this.data;
+	}
+
 	public TextData getTextData() {
 		return this.currentTextData;
 	}
@@ -307,6 +312,11 @@ public abstract class WUserInput implements Widget {
 			this.setCurrentDE();
 		}
 
+	}
+
+	@Override
+	public void setText(String text) {
+		this.setData(text);
 	}
 
 	public void setTextData(TextData textData) {

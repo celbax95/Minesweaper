@@ -14,11 +14,11 @@ import fr.logger.Logger;
 import fr.util.collider.AABB;
 import fr.util.collider.Collider;
 import fr.util.point.Point;
+import fr.util.widgets.TextableWidget;
 import fr.util.widgets.WidgetHolder;
-import fr.util.widgets.Widget;
 import fr.util.widgets.widget.data.TextData;
 
-public abstract class WUserKeyInput implements Widget {
+public abstract class WUserKeyInput implements TextableWidget {
 	private static final int DATA_MOUSE_LEFT = -1;
 	private static final int DATA_MOUSE_MIDDLE = -2;
 	private static final int DATA_MOUSE_RIGHT = -3;
@@ -214,6 +214,11 @@ public abstract class WUserKeyInput implements Widget {
 		return this.stdDrawElement;
 	}
 
+	@Override
+	public String getText() {
+		return this.label;
+	}
+
 	public TextData getTextData() {
 		return this.currentTextData;
 	}
@@ -310,6 +315,11 @@ public abstract class WUserKeyInput implements Widget {
 		}
 
 		this.setCurrentDE();
+	}
+
+	@Override
+	public void setText(String text) {
+		this.setLabel(text);
 	}
 
 	public void setTextData(TextData textData) {

@@ -89,6 +89,11 @@ public class DELabel implements DrawElement {
 	}
 
 	@Override
+	public String getText() {
+		return this.label.getText();
+	}
+
+	@Override
 	public boolean isLocked() {
 		return this.lock;
 	}
@@ -127,5 +132,10 @@ public class DELabel implements DrawElement {
 
 	public void setSupBound(Point supBound) {
 		this.supBound = supBound.clone();
+	}
+
+	@Override
+	public void setText(String text) {
+		this.label.setText(text);
 	}
 }

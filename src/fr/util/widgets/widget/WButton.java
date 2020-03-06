@@ -8,10 +8,10 @@ import fr.logger.Logger;
 import fr.util.collider.AABB;
 import fr.util.collider.Collider;
 import fr.util.point.Point;
+import fr.util.widgets.TextableWidget;
 import fr.util.widgets.WidgetHolder;
-import fr.util.widgets.Widget;
 
-public abstract class WButton implements Widget {
+public abstract class WButton implements TextableWidget {
 	private Point pos;
 
 	private AABB hitbox;
@@ -34,6 +34,23 @@ public abstract class WButton implements Widget {
 
 	private WidgetHolder page;
 
+	public WButton(WButton other) {
+		this(other == null ? null : other.page);
+		if (other == null)
+			return;
+		this.setPos(other.pos);
+		AABB hb = new AABB(this.pos, new Point(), new Point());
+		hb.min(new Point(other.hitbox.min()));
+		hb.max(new Point(other.hitbox.max()));
+
+		this.setHitbox(hb);
+
+		this.setStdDrawElement(other.stdDrawElement == null ? null : other.stdDrawElement.clone());
+		this.setPressedDrawElement(other.pressedDrawElement == null ? null : other.pressedDrawElement.clone());
+		this.setCanPressed(other.canPressed);
+		this.setPage(other.page);
+	}
+
 	public WButton(WidgetHolder p) {
 		this.page = p;
 		this.pos = new Point();
@@ -53,23 +70,6 @@ public abstract class WButton implements Widget {
 		this.mouseOn = false;
 
 		this.currentDE = null;
-	}
-
-	public WButton(WButton other) {
-		this(other == null ? null : other.page);
-		if (other == null)
-			return;
-		this.setPos(other.pos);
-		AABB hb = new AABB(this.pos, new Point(), new Point());
-		hb.min(new Point(other.hitbox.min()));
-		hb.max(new Point(other.hitbox.max()));
-
-		this.setHitbox(hb);
-
-		this.setStdDrawElement(other.stdDrawElement == null ? null : other.stdDrawElement.clone());
-		this.setPressedDrawElement(other.pressedDrawElement == null ? null : other.pressedDrawElement.clone());
-		this.setCanPressed(other.canPressed);
-		this.setPage(other.page);
 	}
 
 	public abstract void action();
@@ -119,6 +119,13 @@ public abstract class WButton implements Widget {
 	 */
 	public DrawElement getStdDrawElement() {
 		return this.stdDrawElement;
+	}
+
+	@Override
+	public String getText() {
+		if (this.currentDE != null)
+			return this.currentDE.getText();
+		return "";
 	}
 
 	public boolean isCanPressed() {
@@ -228,6 +235,12 @@ public abstract class WButton implements Widget {
 				this.currentDE = this.stdDrawElement;
 			}
 		}
+	}
+
+	@Override
+	public void setText(String text) {
+		this.stdDrawElement.setText(text);
+		this.pressedDrawElement.setText(text);
 	}
 
 	@Override

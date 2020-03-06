@@ -12,8 +12,8 @@ import fr.inputs.mouse.MouseEvent;
 import fr.util.collider.AABB;
 import fr.util.collider.Collider;
 import fr.util.point.Point;
-import fr.util.widgets.WidgetHolder;
 import fr.util.widgets.Widget;
+import fr.util.widgets.WidgetHolder;
 import fr.util.widgets.widget.drawelements.DERectangle;
 
 public class WHScroller implements Widget {

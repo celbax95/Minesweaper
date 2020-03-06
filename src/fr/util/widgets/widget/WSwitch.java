@@ -8,10 +8,10 @@ import fr.logger.Logger;
 import fr.util.collider.AABB;
 import fr.util.collider.Collider;
 import fr.util.point.Point;
-import fr.util.widgets.Widget;
+import fr.util.widgets.TextableWidget;
 import fr.util.widgets.WidgetHolder;
 
-public abstract class WSwitch implements Widget {
+public abstract class WSwitch implements TextableWidget {
 	private Point pos;
 
 	private DrawElement on, pressedOn;
@@ -152,6 +152,13 @@ public abstract class WSwitch implements Widget {
 	 */
 	public Point getSize() {
 		return this.currentDE == null ? new Point() : this.currentDE.getSize();
+	}
+
+	@Override
+	public String getText() {
+		if (this.currentDE != null)
+			return this.currentDE.getText();
+		return "";
 	}
 
 	/**
@@ -330,6 +337,17 @@ public abstract class WSwitch implements Widget {
 		if (pressedOn != null) {
 			this.pressedOn = pressedOn.clone();
 			this.pressedOn.lock();
+		}
+	}
+
+	@Override
+	public void setText(String text) {
+		if (this.active) {
+			this.on.setText(text);
+			this.pressedOn.setText(text);
+		} else {
+			this.off.setText(text);
+			this.pressedOff.setText(text);
 		}
 	}
 

@@ -13,9 +13,13 @@ public interface DrawElement {
 
 	Point getSize();
 
+	String getText();
+
 	boolean isLocked();
 
 	void lock();
 
 	void setPos(Point pos);
+
+	void setText(String text);
 }

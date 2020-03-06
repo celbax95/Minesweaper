@@ -14,8 +14,8 @@ public class DEImage implements DrawElement {
 	private boolean lock;
 
 	private Point pos;
-	private Point size;
 
+	private Point size;
 	private BorderData border;
 
 	private TextData label;
@@ -122,6 +122,11 @@ public class DEImage implements DrawElement {
 	}
 
 	@Override
+	public String getText() {
+		return this.label.getText();
+	}
+
+	@Override
 	public boolean isLocked() {
 		return this.lock;
 	}
@@ -188,5 +193,10 @@ public class DEImage implements DrawElement {
 
 	private void setSize(Point size) {
 		this.size = size;
+	}
+
+	@Override
+	public void setText(String text) {
+		this.label.setText(text);
 	}
 }

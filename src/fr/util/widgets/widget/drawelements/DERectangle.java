@@ -141,6 +141,11 @@ public class DERectangle implements DrawElement {
 	}
 
 	@Override
+	public String getText() {
+		return this.label.getText();
+	}
+
+	@Override
 	public boolean isLocked() {
 		return this.lock;
 	}
@@ -226,8 +231,8 @@ public class DERectangle implements DrawElement {
 		this.halfSize = size.clone().div(2);
 	}
 
+	@Override
 	public void setText(String text) {
-		TextData td = this.label.clone();
-		td.setText(text);
+		this.label.setText(text);
 	}
 }

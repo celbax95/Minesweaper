@@ -5,10 +5,10 @@ import java.awt.Graphics2D;
 import fr.inputs.Input;
 import fr.logger.Logger;
 import fr.util.point.Point;
+import fr.util.widgets.TextableWidget;
 import fr.util.widgets.WidgetHolder;
-import fr.util.widgets.Widget;
 
-public class WElement implements Widget {
+public class WElement implements TextableWidget {
 	private DrawElement drawElement;
 
 	private Point pos;
@@ -17,13 +17,6 @@ public class WElement implements Widget {
 
 	private WidgetHolder page;
 
-	public WElement(WidgetHolder p) {
-		this.page = p;
-		this.pos = new Point();
-		this.drawElement = null;
-		this.visible = true;
-	}
-
 	public WElement(WElement other) {
 		this(other == null ? null : other.page);
 		if (other == null)
@@ -31,6 +24,13 @@ public class WElement implements Widget {
 		this.setDrawElement(other.drawElement == null ? null : other.drawElement.clone());
 		this.setPos(other.pos);
 		this.setPage(other.page);
+	}
+
+	public WElement(WidgetHolder p) {
+		this.page = p;
+		this.pos = new Point();
+		this.drawElement = null;
+		this.visible = true;
 	}
 
 	@Override
@@ -66,6 +66,11 @@ public class WElement implements Widget {
 	}
 
 	@Override
+	public String getText() {
+		return this.drawElement.getText();
+	}
+
+	@Override
 	public boolean isVisible() {
 		return this.visible;
 	}
@@ -87,6 +92,11 @@ public class WElement implements Widget {
 	@Override
 	public void setPos(Point pos) {
 		this.pos.set(pos);
+	}
+
+	@Override
+	public void setText(String text) {
+		this.drawElement.setText(text);
 	}
 
 	@Override
