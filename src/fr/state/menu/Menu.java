@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.imagesmanager.ImageManager;
 import fr.inputs.Input;
@@ -73,21 +74,25 @@ public class Menu extends WidgetHolder {
 		};
 	}
 
+	private static int getBombsAmount(Point size, double bombDensity) {
+		return (int) Math.floor(size.x * size.y * bombDensity);
+	}
+
 	private MenuState state;
 
 	private WinData winData;
 
 	private TextableWidget bestScoreLabel;
+	private Point size;
 
-	private int size;
-	private double difficulty;
+	private double bombDensity;
 
 	public Menu(MenuState state, WinData wd) {
 		this.state = state;
 		this.winData = wd;
 
-		this.size = 0;
-		this.difficulty = 0;
+		this.size = ConfMenu.getSizeSmall();
+		this.bombDensity = 0;
 
 		this.bestScoreLabel = null;
 
@@ -125,6 +130,11 @@ public class Menu extends WidgetHolder {
 			@Override
 			public void selectedChanged(String selected, boolean state) {
 				System.out.println(selected + " est " + (state ? "selectionne" : "deselectionne"));
+
+				if (state) {
+					Menu.this.bombDensity = Menu.this.getBombDensityFromSwitchName(selected);
+				}
+
 				Menu.this.updateBestScoreLabel();
 			}
 		};
@@ -148,6 +158,17 @@ public class Menu extends WidgetHolder {
 			public void action() {
 				StatePanel sp = Menu.this.state.getStatePanel();
 				IAppState nextState = sp.getAppStateManager().getState("game");
+
+				Map<String, Object> initData = new HashMap<>();
+
+				int bombs = Menu.getBombsAmount(Menu.this.size, Menu.this.bombDensity);
+
+				initData.put("size", Menu.this.size);
+
+				initData.put("bombs", bombs);
+
+				nextState.setInitData(initData);
+
 				sp.setState(nextState);
 			}
 		};
@@ -185,6 +206,11 @@ public class Menu extends WidgetHolder {
 			@Override
 			public void selectedChanged(String selected, boolean state) {
 				System.out.println(selected + " est " + (state ? "selectionne" : "deselectionne"));
+
+				if (state) {
+					Menu.this.size = Menu.this.getSizeFromSwitchName(selected);
+				}
+
 				Menu.this.updateBestScoreLabel();
 			}
 		};
@@ -295,16 +321,16 @@ public class Menu extends WidgetHolder {
 		this.drawWidgets(g);
 	}
 
-	private double getBombDensityFromConf(int difficulty) {
+	private Double getBombDensityFromSwitchName(String difficulty) {
 		switch (difficulty) {
-		case 0:
+		case "easy":
 			return ConfMenu.getDifficultyEasy();
-		case 1:
+		case "normal":
 			return ConfMenu.getDifficultyNormal();
-		case 2:
+		case "hard":
 			return ConfMenu.getDifficultyHard();
 		default:
-			return 0;
+			return 0D;
 		}
 	}
 
@@ -313,13 +339,13 @@ public class Menu extends WidgetHolder {
 		return data;
 	}
 
-	private Point getSizeFromConf(int size) {
+	private Point getSizeFromSwitchName(String size) {
 		switch (size) {
-		case 0:
+		case "small":
 			return ConfMenu.getSizeSmall();
-		case 1:
+		case "medium":
 			return ConfMenu.getSizeMedium();
-		case 2:
+		case "large":
 			return ConfMenu.getSizeLarge();
 		default:
 			return new Point();
@@ -338,7 +364,7 @@ public class Menu extends WidgetHolder {
 	public void update(Input input) {
 		for (KeyboardEvent e : input.keyboardEvents) {
 			if (e.key == KeyEvent.VK_ESCAPE) {
-				System.exit(0);
+				// System.exit(0);
 			}
 		}
 
@@ -347,11 +373,9 @@ public class Menu extends WidgetHolder {
 
 	public void updateBestScoreLabel() {
 
-		Point size = this.getSizeFromConf(this.size);
+		int bombs = Menu.getBombsAmount(this.size, this.bombDensity);
 
-		int bombs = (int) Math.floor(size.x * size.y * this.difficulty);
-
-		int score = ConfMenu.getBestScore(size.ix(), size.iy(), bombs);
+		int score = ConfMenu.getBestScore(this.size.ix(), this.size.iy(), bombs);
 
 		String scoreLbl = BEST_SCORE_LABEL_SCHEME.replaceAll("X", score == -1 ? "None" : String.valueOf(score));
 

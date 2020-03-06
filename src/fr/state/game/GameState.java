@@ -23,6 +23,12 @@ public class GameState implements IAppState {
 
 	private final Color BACKGROUND = new Color(this.GRAY, this.GRAY, this.GRAY);
 
+	Map<String, Object> initData;
+
+	public GameState() {
+		this.initData = null;
+	}
+
 	@Override
 	public void draw(Graphics2D g) {
 		this.game.draw(g);
@@ -43,6 +49,7 @@ public class GameState implements IAppState {
 
 	@Override
 	public void setInitData(Map<String, Object> data) {
+		this.initData = data;
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class GameState implements IAppState {
 
 		ImageManager.getInstance().removeAll();
 
-		this.game = new Game(this, this.sp.getWinData());
+		this.game = new Game(this, this.sp.getWinData(), this.initData);
 
 		this.sp.setBackground(this.BACKGROUND);
 

@@ -3,7 +3,7 @@
   <!-- Menu -->
   <param name="sizeSmall" type="String" value="10x8"/>
   <param name="sizeMedium" type="String" value="18x14"/>
-  <param name="SizeLarge" type="String" value="25x20"/>
+  <param name="sizeLarge" type="String" value="25x20"/>
   <param name="difficultyEasy" type="double" value="0.125"/>
   <param name="difficultyNormal" type="double" value="0.158730"/>
   <param name="difficultyHard" type="double" value="0.20625"/>

@@ -14,7 +14,7 @@ public class GameLoop implements Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (Thread.currentThread().isInterrupted() == false) {
 			synchronized (this) {
 
 				if (this.loop.isInterrupted()) {
