@@ -65,13 +65,18 @@ public class MouseEventList implements Mouse {
 
 	@Override
 	public void mouseMoved(java.awt.event.MouseEvent e) {
-		this.pos.set(new Point(e.getX(), e.getY()).mult(this.winData.getInvWindowRatio()));
+		this.setPos(e);
 
 		this.addEvent(MouseEvent.MOVE);
 	}
 
 	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
+
+		if (this.pos == null) {
+			this.setPos(e);
+		}
+
 		switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
 			this.addEvent(MouseEvent.LEFT_PRESSED);
@@ -87,6 +92,11 @@ public class MouseEventList implements Mouse {
 
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
+
+		if (this.pos == null) {
+			this.setPos(e);
+		}
+
 		switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
 			this.addEvent(MouseEvent.LEFT_RELEASED);
@@ -102,10 +112,19 @@ public class MouseEventList implements Mouse {
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
+
+		if (this.pos == null) {
+			this.setPos(e);
+		}
+
 		if (e.getWheelRotation() < 0) {
 			this.addEvent(MouseEvent.WHEEL_UP);
 		} else if (e.getWheelRotation() > 0) {
 			this.addEvent(MouseEvent.WHEEL_DOWN);
 		}
+	}
+
+	private void setPos(java.awt.event.MouseEvent e) {
+		this.pos.set(new Point(e.getX(), e.getY()).mult(this.winData.getInvWindowRatio()));
 	}
 }
