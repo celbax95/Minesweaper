@@ -99,7 +99,7 @@ public class Game {
 
 	public void update(Input input) {
 		for (KeyboardEvent e : input.keyboardEvents) {
-			if (e.key == KeyEvent.VK_ESCAPE) {
+			if (e.key == KeyEvent.VK_ESCAPE && !e.pressed) {
 				StatePanel sp = this.gameState.getStatePanel();
 				IAppState nextState = sp.getAppStateManager().getState("menu");
 

@@ -363,8 +363,8 @@ public class Menu extends WidgetHolder {
 	@Override
 	public void update(Input input) {
 		for (KeyboardEvent e : input.keyboardEvents) {
-			if (e.key == KeyEvent.VK_ESCAPE) {
-				// System.exit(0);
+			if (e.key == KeyEvent.VK_ESCAPE && !e.pressed) {
+				System.exit(0);
 			}
 		}
 
