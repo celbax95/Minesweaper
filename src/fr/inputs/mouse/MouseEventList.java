@@ -16,6 +16,8 @@ public class MouseEventList implements Mouse {
 
 	private Point pos;
 
+	private boolean posSet;
+
 	private WinData winData;
 
 	private List<MouseEvent> events;
@@ -25,6 +27,8 @@ public class MouseEventList implements Mouse {
 	 */
 	public MouseEventList(WinData w) {
 		this.pos = new Point();
+
+		this.posSet = false;
 
 		this.winData = w;
 
@@ -73,8 +77,9 @@ public class MouseEventList implements Mouse {
 	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
 
-		if (this.pos == null) {
+		if (!this.posSet) {
 			this.setPos(e);
+			this.posSet = true;
 		}
 
 		switch (e.getButton()) {
@@ -93,8 +98,9 @@ public class MouseEventList implements Mouse {
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
 
-		if (this.pos == null) {
+		if (!this.posSet) {
 			this.setPos(e);
+			this.posSet = true;
 		}
 
 		switch (e.getButton()) {
@@ -113,8 +119,9 @@ public class MouseEventList implements Mouse {
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 
-		if (this.pos == null) {
+		if (!this.posSet) {
 			this.setPos(e);
+			this.posSet = true;
 		}
 
 		if (e.getWheelRotation() < 0) {
