@@ -51,6 +51,7 @@ public class Cryptor {
 	}
 
 	private String decodeFromBase64(String string) {
+		string += "==";
 		return new String(Base64.decode(string));
 	}
 
@@ -140,7 +141,9 @@ public class Cryptor {
 	}
 
 	private String encodeToBase64(String string) {
-		return Base64.encode(string.getBytes());
+		String encodedValue = Base64.encode(string.getBytes());
+
+		return encodedValue.substring(0, encodedValue.length() - 2);
 	}
 
 	public String encrypt(boolean value, byte[] key) {
@@ -242,6 +245,6 @@ public class Cryptor {
 	public String unScramble(String value) {
 		System.out.println(value);
 
-		return value.substring(this.scrambler - 1, value.length() - this.scrambler);
+		return value.substring(this.scrambler, value.length() - this.scrambler);
 	}
 }
