@@ -26,6 +26,7 @@ import fr.util.widgets.widget.WSwitch;
 import fr.util.widgets.widget.data.TextData;
 import fr.util.widgets.widget.drawelements.DEImage;
 import fr.util.widgets.widget.drawelements.DELabel;
+import fr.util.widgets.widget.drawelements.DERectangle;
 import fr.window.WinData;
 
 public class Menu extends WidgetHolder {
@@ -199,6 +200,24 @@ public class Menu extends WidgetHolder {
 		return w;
 	}
 
+	private CoverButton createResetScore() {
+		CoverButton w = new CoverButton(this);
+
+		DERectangle de = new DERectangle(new Point(), new Point(262, 70), Color.red, null, null);
+
+		w.setStdDrawElement(de);
+
+		DERectangle dep = new DERectangle(new Point(), new Point(262, 70), Color.PINK, null, null);
+
+		w.setPressedDrawElement(dep);
+
+		w.setPos(new Point(82, 542));
+
+		w.setHitboxFromDrawElement();
+
+		return w;
+	}
+
 	public Widget createSizeSwitchs() {
 		WExclusiveSwitchs es = new WExclusiveSwitchs(this) {
 			@Override
@@ -308,6 +327,8 @@ public class Menu extends WidgetHolder {
 		widgets.add(this.createDifficultySwitchs());
 
 		widgets.add(this.createPlayButton());
+
+		widgets.add(this.createResetScore());
 
 		return widgets;
 	}

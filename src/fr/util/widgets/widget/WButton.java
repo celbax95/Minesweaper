@@ -12,27 +12,27 @@ import fr.util.widgets.TextableWidget;
 import fr.util.widgets.WidgetHolder;
 
 public abstract class WButton implements TextableWidget {
-	private Point pos;
+	protected Point pos;
 
-	private AABB hitbox;
+	protected AABB hitbox;
 
-	private DrawElement stdDrawElement;
+	protected DrawElement stdDrawElement;
 
-	private DrawElement pressedDrawElement;
+	protected DrawElement pressedDrawElement;
 
-	private DrawElement cantPressDrawElement;
+	protected DrawElement cantPressDrawElement;
 
-	private DrawElement currentDE;
+	protected DrawElement currentDE;
 
-	private boolean pressed;
+	protected boolean pressed;
 
-	private boolean mouseOn;
+	protected boolean mouseOn;
 
-	private boolean canPressed;
+	protected boolean canPressed;
 
-	private boolean visible;
+	protected boolean visible;
 
-	private WidgetHolder page;
+	protected WidgetHolder page;
 
 	public WButton(WButton other) {
 		this(other == null ? null : other.page);
