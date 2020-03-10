@@ -243,8 +243,6 @@ public class Cryptor {
 	}
 
 	public String unScramble(String value) {
-		System.out.println(value);
-
 		return value.substring(this.scrambler, value.length() - this.scrambler);
 	}
 }

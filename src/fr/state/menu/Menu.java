@@ -129,8 +129,6 @@ public class Menu extends WidgetHolder {
 		WExclusiveSwitchs es = new WExclusiveSwitchs(this) {
 			@Override
 			public void selectedChanged(String selected, boolean state) {
-				System.out.println(selected + " est " + (state ? "selectionne" : "deselectionne"));
-
 				if (state) {
 					Menu.this.bombDensity = Menu.this.getBombDensityFromSwitchName(selected);
 				}
@@ -205,8 +203,6 @@ public class Menu extends WidgetHolder {
 		WExclusiveSwitchs es = new WExclusiveSwitchs(this) {
 			@Override
 			public void selectedChanged(String selected, boolean state) {
-				System.out.println(selected + " est " + (state ? "selectionne" : "deselectionne"));
-
 				if (state) {
 					Menu.this.size = Menu.this.getSizeFromSwitchName(selected);
 				}
@@ -378,8 +374,6 @@ public class Menu extends WidgetHolder {
 		int score = ConfMenu.getBestScore(this.size.ix(), this.size.iy(), bombs);
 
 		String scoreLbl = BEST_SCORE_LABEL_SCHEME.replaceAll("X", score == -1 ? "None" : String.valueOf(score));
-
-		System.out.println(scoreLbl);
 
 		this.bestScoreLabel.setText(scoreLbl);
 	}

@@ -113,10 +113,8 @@ public abstract class WUserKeyInput implements TextableWidget {
 	}
 
 	private void changeData(int key) {
-
 		this.setData(key);
 		this.dataChanged(this.data);
-		System.out.println(this.currentTextData.getColor());
 	}
 
 	private boolean changeFontSize() {
