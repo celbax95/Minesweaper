@@ -204,7 +204,13 @@ public class Menu extends WidgetHolder {
 	}
 
 	private CoverButton createResetScore() {
-		this.resetScore = new CoverButton(this);
+		this.resetScore = new CoverButton(this) {
+			@Override
+			public void action() {
+				Menu.this.removeCurrentScore();
+			}
+
+		};
 
 		BorderData bd = new BorderData(2, Color.BLACK, 0);
 
@@ -388,6 +394,12 @@ public class Menu extends WidgetHolder {
 
 	public MenuState getState() {
 		return this.state;
+	}
+
+	private void removeCurrentScore() {
+		int bombs = Menu.getBombsAmount(this.size, this.bombDensity);
+
+		ConfMenu.removeScore(this.size.ix(), this.size.iy(), bombs);
 	}
 
 	public void setState(MenuState state) {

@@ -12,7 +12,7 @@ import fr.util.point.Point;
 import fr.util.widgets.WidgetHolder;
 import fr.util.widgets.widget.WButton;
 
-public class CoverButton extends WButton {
+public abstract class CoverButton extends WButton {
 
 	private static final int PADDING = -1;
 
@@ -40,10 +40,6 @@ public class CoverButton extends WButton {
 		super(p);
 
 		this.init();
-	}
-
-	@Override
-	public void action() {
 	}
 
 	@Override

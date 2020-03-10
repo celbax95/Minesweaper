@@ -95,11 +95,24 @@ public class ConfMenu {
 		return new Point(Double.valueOf(str[0]), Double.valueOf(str[1]));
 	}
 
+	public static void removeScore(int width, int height, int bombs) {
+
+		Object file = dfm.getFile("score");
+
+		CRYPTOR.setScrambler(0);
+		String paramName = CRYPTOR.encrypt(width + " " + height + " " + bombs, ENCODE_KEY);
+
+		xmlManager.removeParam(file, paramName);
+
+		dfm.saveFile(file);
+	}
+
 	public static void setDifficulty(int difficulty) {
 
 		Object file = dfm.getFile("menu");
 
 		xmlManager.setParam(file, "difficulty", difficulty);
+
 		dfm.saveFile(file);
 	}
 

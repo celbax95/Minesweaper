@@ -92,7 +92,6 @@ public class XMLManagerDOM implements XMLManagerBackend {
 		newParam.setAttribute("value", value.toString());
 
 		((Node) this.getRoot(doc)).appendChild(newParam);
-
 	}
 
 	/**
@@ -249,6 +248,24 @@ public class XMLManagerDOM implements XMLManagerBackend {
 		}
 
 		return oa;
+	}
+
+	@Override
+	public void removeParam(Object doc, String paramName) {
+		Element root = ((Document) doc).getDocumentElement();
+
+		System.out.println(root.getNodeName());
+
+		Element e = null;
+		try {
+			e = (Element) this.xpath.evaluate("./param[@name = '" + paramName + "']",
+					((Document) doc).getDocumentElement(), XPathConstants.NODE);
+
+			e.getParentNode().removeChild(e);
+
+		} catch (XPathExpressionException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	private void removeWhiteSpaces(Object doc) {

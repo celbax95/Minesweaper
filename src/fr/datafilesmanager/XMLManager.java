@@ -90,6 +90,14 @@ public interface XMLManager {
 	Object getRoot(Object document);
 
 	/**
+	 * Supprime le parametre de l'element 'doc'
+	 *
+	 * @param doc       : element depuis lequel on cherche
+	 * @param paramName : nom du parametre a recupere
+	 */
+	void removeParam(Object doc, String paramName);
+
+	/**
 	 * Change la valeur d'un parametre
 	 *
 	 * @param doc       : element depuis lequel on cherche le param
