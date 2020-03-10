@@ -86,7 +86,7 @@ public class CoverButton extends WButton {
 
 	private void slide() {
 		if (this.slideDown) {
-			if (this.slideState + this.slideRate < this.size.y) {
+			if (this.slideState + this.slideRate < this.size.iy()) {
 				this.slideState += this.slideRate;
 			} else {
 				this.slideState = this.size.iy();

@@ -23,6 +23,7 @@ import fr.util.widgets.widget.WButton;
 import fr.util.widgets.widget.WElement;
 import fr.util.widgets.widget.WExclusiveSwitchs;
 import fr.util.widgets.widget.WSwitch;
+import fr.util.widgets.widget.data.BorderData;
 import fr.util.widgets.widget.data.TextData;
 import fr.util.widgets.widget.drawelements.DEImage;
 import fr.util.widgets.widget.drawelements.DELabel;
@@ -87,6 +88,8 @@ public class Menu extends WidgetHolder {
 	private Point size;
 
 	private double bombDensity;
+
+	private CoverButton resetScore;
 
 	public Menu(MenuState state, WinData wd) {
 		this.state = state;
@@ -201,21 +204,35 @@ public class Menu extends WidgetHolder {
 	}
 
 	private CoverButton createResetScore() {
-		CoverButton w = new CoverButton(this);
+		this.resetScore = new CoverButton(this);
 
-		DERectangle de = new DERectangle(new Point(), new Point(262, 70), Color.red, null, null);
+		BorderData bd = new BorderData(2, Color.BLACK, 0);
 
-		w.setStdDrawElement(de);
+		Font font = new Font(new HashMap<TextAttribute, Object>() {
+			private static final long serialVersionUID = 1L;
+			{
+				this.put(TextAttribute.TRACKING, 0.035);
+				this.put(TextAttribute.FAMILY, "Tw Cen MT");
+				this.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+				this.put(TextAttribute.SIZE, 40);
+			}
+		});
 
-		DERectangle dep = new DERectangle(new Point(), new Point(262, 70), Color.PINK, null, null);
+		TextData td = new TextData(new Point(), font, "! RESET !", Color.BLACK, 3);
 
-		w.setPressedDrawElement(dep);
+		DERectangle de = new DERectangle(new Point(), new Point(262, 70), new Color(150, 0, 0), bd, td);
 
-		w.setPos(new Point(82, 542));
+		this.resetScore.setStdDrawElement(de);
 
-		w.setHitboxFromDrawElement();
+		DERectangle dep = new DERectangle(new Point(), new Point(262, 70), new Color(170, 0, 0), bd, td);
 
-		return w;
+		this.resetScore.setPressedDrawElement(dep);
+
+		this.resetScore.setPos(new Point(82, 542));
+
+		this.resetScore.setHitboxFromDrawElement();
+
+		return this.resetScore;
 	}
 
 	public Widget createSizeSwitchs() {
@@ -397,5 +414,9 @@ public class Menu extends WidgetHolder {
 		String scoreLbl = BEST_SCORE_LABEL_SCHEME.replaceAll("X", score == -1 ? "None" : String.valueOf(score));
 
 		this.bestScoreLabel.setText(scoreLbl);
+
+		if (this.resetScore != null) {
+			this.resetScore.setCanPressed(score != -1);
+		}
 	}
 }
