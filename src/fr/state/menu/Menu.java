@@ -352,6 +352,7 @@ public class Menu extends WidgetHolder {
 		widgets.add(this.createPlayButton());
 
 		widgets.add(this.createResetScore());
+		this.updateBestScoreLabel();
 
 		return widgets;
 	}
