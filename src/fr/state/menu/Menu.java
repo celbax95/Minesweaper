@@ -209,7 +209,6 @@ public class Menu extends WidgetHolder {
 			public void action() {
 				Menu.this.removeCurrentScore();
 			}
-
 		};
 
 		BorderData bd = new BorderData(2, Color.BLACK, 0);
@@ -401,6 +400,8 @@ public class Menu extends WidgetHolder {
 		int bombs = Menu.getBombsAmount(this.size, this.bombDensity);
 
 		ConfMenu.removeScore(this.size.ix(), this.size.iy(), bombs);
+
+		this.updateBestScoreLabel();
 	}
 
 	public void setState(MenuState state) {
@@ -429,6 +430,7 @@ public class Menu extends WidgetHolder {
 		this.bestScoreLabel.setText(scoreLbl);
 
 		if (this.resetScore != null) {
+			this.resetScore.slideUp();
 			this.resetScore.setCanPressed(score != -1);
 		}
 	}

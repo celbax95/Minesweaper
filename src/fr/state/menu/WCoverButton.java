@@ -101,50 +101,42 @@ public abstract class WCoverButton extends WButton {
 		}
 	}
 
+	public void slideDown() {
+		if (!this.slideDown && !this.down) {
+			this.up = false;
+			this.down = false;
+			this.slideUp = false;
+			this.slideDown = true;
+		}
+	}
+
+	public void slideUp() {
+		if (!this.slideUp && !this.up) {
+			this.up = false;
+			this.down = false;
+			this.slideUp = true;
+			this.slideDown = false;
+		}
+	}
+
 	@Override
 	public void update(Input input) {
-		if (!this.canPressed || !this.visible)
+		if (!this.visible)
 			return;
 
 		this.slide();
 
+		if (!this.canPressed)
+			return;
+
 		if (Collider.AABBvsPoint(this.hitbox, input.mousePos)) {
-			if (!this.slideDown && !this.down) {
-				this.slideDown = true;
-				this.slideUp = false;
-				this.down = false;
-				this.up = false;
-			}
+			this.slideDown();
 		} else {
-			if (!this.slideUp && !this.up) {
-				this.slideDown = false;
-				this.slideUp = true;
-				this.down = false;
-				this.up = false;
-			}
+			this.slideUp();
 		}
 
 		if (this.down) {
 			super.update(input);
 		}
-//		for (MouseEvent e : input.mouseEvents) {
-//			switch (e.id) {
-//			case MouseEvent.LEFT_PRESSED:
-//				if (Collider.AABBvsPoint(this.hitbox, e.pos) && this.down) {
-//					setPressed = true;
-//				}
-//				continue;
-//
-//			case MouseEvent.LEFT_RELEASED:
-//				if (Collider.AABBvsPoint(this.hitbox, e.pos)) {
-//					if (this.pressed) {
-//						this.action();
-//					}
-//				}
-//				this.setPressed(false);
-//				continue;
-//			}
-//		}
-//		this.setMouseOn(Collider.AABBvsPoint(this.hitbox, input.mousePos));
 	}
 }
