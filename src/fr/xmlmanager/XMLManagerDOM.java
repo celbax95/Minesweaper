@@ -134,6 +134,7 @@ public class XMLManagerDOM implements XMLManagerBackend {
 			xml.getDocumentElement().normalize();
 			return xml;
 		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -252,10 +253,6 @@ public class XMLManagerDOM implements XMLManagerBackend {
 
 	@Override
 	public void removeParam(Object doc, String paramName) {
-		Element root = ((Document) doc).getDocumentElement();
-
-		System.out.println(root.getNodeName());
-
 		Element e = null;
 		try {
 			e = (Element) this.xpath.evaluate("./param[@name = '" + paramName + "']",
@@ -291,6 +288,7 @@ public class XMLManagerDOM implements XMLManagerBackend {
 
 		DOMSource source = new DOMSource(((Document) doc).getDocumentElement());
 		StreamResult result = null;
+
 		try {
 			result = new StreamResult(new File(URLDecoder.decode(document.getBaseURI(), "UTF-8").substring(6)));
 		} catch (UnsupportedEncodingException e1) {

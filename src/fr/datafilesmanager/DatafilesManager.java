@@ -56,7 +56,7 @@ public class DatafilesManager {
 	 * Ajoute un fichier au gestionnaire
 	 *
 	 * @param name : nom du fichier
-	 * @param url  : chemin (path) du fichier
+	 * @param path : path du fichier
 	 */
 	public void addFile(String name, String path) {
 
@@ -95,7 +95,6 @@ public class DatafilesManager {
 			return fileName.substring(fileName.lastIndexOf("."));
 		}
 		return "";
-
 	}
 
 	/**
@@ -109,7 +108,8 @@ public class DatafilesManager {
 		try {
 			return this.xmlManager.getDocument(this.files.get(name));
 		} catch (Exception e) {
-			System.err.println("La valeur \"" + name + "\" n'existe pas dans les fichiers connus.");
+			System.err.println(
+					e.getLocalizedMessage() + "La valeur \"" + name + "\" n'existe pas dans les fichiers connus.");
 			System.exit(0);
 		}
 		return null; // Inaccessible
