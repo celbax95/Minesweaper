@@ -18,6 +18,21 @@ public class ImageManager {
 	 */
 	private static volatile ImageManager instance;
 
+	/**
+	 * Return a singleton instance of ImageManager.
+	 */
+	public static ImageManager getInstance() {
+		// Double lock for thread safety.
+		if (instance == null) {
+			synchronized (ImageManager.class) {
+				if (instance == null) {
+					instance = new ImageManager();
+				}
+			}
+		}
+		return instance;
+	}
+
 	private Map<String, Image> images;
 
 	/**
@@ -37,19 +52,20 @@ public class ImageManager {
 		} else {
 			// Si il n'existe pas on prend l'image par defaut
 			InputStream is = this.getClass().getResourceAsStream(path);
-
 			Image img = null;
-			try {
-				img = ImageIO.read(is);
-			} catch (IOException e) {
-				e.printStackTrace();
+
+			if (is != null) {
+				try {
+					img = ImageIO.read(is);
+				} catch (IOException e) {
+				}
 			}
 
 			if (img != null) {
 				// Ajout
 				this.images.put(name, img);
 			} else {
-				System.err.println("Ajout de l'image impossible :\n\tL'image \"" + path
+				Logger.err("Ajout de l'image impossible :\n\tL'image \"" + path
 						+ "\" n'existe pas ou n'est pas un fichier .xml");
 			}
 		}
@@ -63,7 +79,7 @@ public class ImageManager {
 		if (this.images.containsKey(name))
 			return this.images.get(name);
 		else {
-			System.err.println("L'image \"" + name + "\" est inconnue.");
+			Logger.err("L'image \"" + name + "\" est inconnue.");
 		}
 		return null;
 	}
@@ -72,27 +88,12 @@ public class ImageManager {
 		if (this.images.containsKey(name)) {
 			this.images.remove(name);
 		} else {
-			System.err.println("L'image \"" + name + "\" est inconnue.");
+			Logger.err("L'image \"" + name + "\" est inconnue.");
 		}
 	}
 
 	public void removeAll() {
 		Logger.inf("Toutes les images ont été déchargées.");
 		this.images.clear();
-	}
-
-	/**
-	 * Return a singleton instance of ImageManager.
-	 */
-	public static ImageManager getInstance() {
-		// Double lock for thread safety.
-		if (instance == null) {
-			synchronized (ImageManager.class) {
-				if (instance == null) {
-					instance = new ImageManager();
-				}
-			}
-		}
-		return instance;
 	}
 }
