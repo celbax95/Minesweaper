@@ -89,7 +89,7 @@ public class Menu extends WidgetHolder {
 
 	private double bombDensity;
 
-	private CoverButton resetScore;
+	private WCoverButton resetScore;
 
 	public Menu(MenuState state, WinData wd) {
 		this.state = state;
@@ -203,8 +203,8 @@ public class Menu extends WidgetHolder {
 		return w;
 	}
 
-	private CoverButton createResetScore() {
-		this.resetScore = new CoverButton(this) {
+	private WCoverButton createResetScore() {
+		this.resetScore = new WCoverButton(this) {
 			@Override
 			public void action() {
 				Menu.this.removeCurrentScore();

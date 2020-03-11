@@ -12,7 +12,7 @@ import fr.util.point.Point;
 import fr.util.widgets.WidgetHolder;
 import fr.util.widgets.widget.WButton;
 
-public abstract class CoverButton extends WButton {
+public abstract class WCoverButton extends WButton {
 
 	private static final int PADDING = -1;
 
@@ -30,13 +30,13 @@ public abstract class CoverButton extends WButton {
 
 	private boolean up;
 
-	public CoverButton(WButton other) {
+	public WCoverButton(WButton other) {
 		super(other);
 
 		this.init();
 	}
 
-	public CoverButton(WidgetHolder p) {
+	public WCoverButton(WidgetHolder p) {
 		super(p);
 
 		this.init();
