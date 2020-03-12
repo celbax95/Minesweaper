@@ -52,6 +52,7 @@ public class Cryptor {
 
 	private String decodeFromBase64(String string) {
 		string += "==";
+
 		return new String(Base64.decode(string));
 	}
 
@@ -130,8 +131,9 @@ public class Cryptor {
 			c.init(Cipher.DECRYPT_MODE, k);
 
 			decryptedValue = new String(c.doFinal(value.getBytes()));
+
 		} catch (Exception e) {
-			return null;
+			return def;
 		}
 
 		if (this.scrambler > 0)
@@ -172,28 +174,39 @@ public class Cryptor {
 
 	public String encrypt(String value, byte[] key) {
 
-		if (this.scrambler > 0) {
-			value = this.scramble(value);
-		}
+		String encoded = "";
+		String tmp = "";
 
-		SecretKeySpec k = new SecretKeySpec(key, "AES");
+		do {
+			tmp = value;
 
-		String encryptedValue = "";
+			if (this.scrambler > 0) {
+				tmp = this.scramble(tmp);
+			}
 
-		try {
-			Cipher c = Cipher.getInstance(ALGORITHM);
+			SecretKeySpec k = new SecretKeySpec(key, "AES");
 
-			c.init(Cipher.ENCRYPT_MODE, k);
+			String encryptedValue = "";
 
-			encryptedValue = new String(c.doFinal(value.getBytes()));
-		} catch (Exception e) {
-			return null;
-		}
+			try {
+				Cipher c = Cipher.getInstance(ALGORITHM);
 
-		if (this.base64Encoding)
-			return this.encodeToBase64(encryptedValue);
-		else
-			return encryptedValue;
+				c.init(Cipher.ENCRYPT_MODE, k);
+
+				encryptedValue = new String(c.doFinal(tmp.getBytes()));
+			} catch (Exception e) {
+				return null;
+			}
+
+			if (this.base64Encoding) {
+				encoded = this.encodeToBase64(encryptedValue);
+			} else {
+				encoded = encryptedValue;
+			}
+
+		} while (!this.decrypt(encoded, value + "_", key).equals(value));
+
+		return encoded;
 	}
 
 	private Key getKey(byte[] key) {
