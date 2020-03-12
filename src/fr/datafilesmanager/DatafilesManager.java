@@ -1,6 +1,7 @@
 package fr.datafilesmanager;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,14 +61,7 @@ public class DatafilesManager {
 	 */
 	public void addFile(String name, String path) {
 
-		File file = new File(path);
-
-		if (file != null && file.exists() && this.getExtension(file).equals(".xml")) {
-			this.files.put(name, file.getPath());
-		} else {
-			System.err.println("Ajout du fichier impossible :\n\tLe fichier \"" + path
-					+ "\" n'existe pas ou n'est pas un fichier .xml");
-		}
+		this.files.put(name, path);
 
 		if (this.xmlManager != null) {
 			if (!this.readOnlyFiles.contains(name)) {
@@ -106,10 +100,19 @@ public class DatafilesManager {
 	 */
 	public Object getFile(String name) {
 		try {
-			return this.xmlManager.getDocument(this.files.get(name));
+			Object doc = null;
+
+			if (this.readOnlyFiles.contains(name)) {
+				InputStream is = DatafilesManager.class.getResourceAsStream(this.files.get(name));
+
+				doc = this.xmlManager.getDocument(is);
+			} else {
+				doc = this.xmlManager.getDocument(this.files.get(name));
+			}
+
+			return doc;
 		} catch (Exception e) {
-			System.err.println(
-					e.getLocalizedMessage() + "La valeur \"" + name + "\" n'existe pas dans les fichiers connus.");
+			System.err.println("La valeur \"" + name + "\" n'existe pas dans les fichiers connus.");
 			System.exit(0);
 		}
 		return null; // Inaccessible

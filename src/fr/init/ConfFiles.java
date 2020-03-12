@@ -50,7 +50,7 @@ public class ConfFiles {// String name, String path
 			if (dfm.isReadOnlyFile(name)) {
 				String path = "/" + RES_DIR_NAME + FILES.get(name);
 
-				dfm.addFile(name, ConfFiles.class.getResource(path).getFile());
+				dfm.addFile(name, path);
 			} else {
 				String path = DIR_NAME + FILES.get(name);
 

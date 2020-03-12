@@ -2,6 +2,7 @@ package fr.xmlmanager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -123,6 +124,17 @@ public class XMLManagerDOM implements XMLManagerBackend {
 	}
 
 	@Override
+	public Object getDocument(InputStream is) throws FileNotFoundException {
+		try {
+			Document xml = this.builder.parse(is);
+			return xml;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
 	public Document getDocument(String filePath) throws FileNotFoundException {
 		File fileXML = new File(filePath);
 
@@ -131,7 +143,6 @@ public class XMLManagerDOM implements XMLManagerBackend {
 
 		try {
 			Document xml = this.builder.parse(fileXML);
-			xml.getDocumentElement().normalize();
 			return xml;
 		} catch (final Exception e) {
 			e.printStackTrace();

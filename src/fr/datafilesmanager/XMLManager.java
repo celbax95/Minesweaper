@@ -1,6 +1,7 @@
 package fr.datafilesmanager;
 
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public interface XMLManager {
 	/**
@@ -13,6 +14,15 @@ public interface XMLManager {
 	 * @see getNode
 	 */
 	String getAttribute(Object doc, String attrName);
+
+	/**
+	 * Recupere un document XML depuis son chemin d'acces (path)
+	 *
+	 * @param inputStream : inputstream lecture seule
+	 * @return le document recupere
+	 * @throws FileNotFoundException : si le fichier n'existe pas
+	 */
+	Object getDocument(InputStream is) throws FileNotFoundException;
 
 	/**
 	 * Recupere un document XML depuis son chemin d'acces (path)
