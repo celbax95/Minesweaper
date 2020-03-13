@@ -2,6 +2,8 @@ package fr.state.menu;
 
 public class MenuLoop implements Runnable {
 
+	private static final int LOOP_RATE = 10;// 32;
+
 	private Thread loop;
 
 	private MenuState state;
@@ -28,9 +30,9 @@ public class MenuLoop implements Runnable {
 
 					this.state.getStatePanel().repaint();
 
-					Thread.sleep(32);
+					Thread.sleep(LOOP_RATE);
 				} catch (InterruptedException | NullPointerException e) {
-					// e.printStackTrace();
+					e.printStackTrace();
 					Thread.currentThread().interrupt();
 				}
 			}

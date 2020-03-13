@@ -161,7 +161,7 @@ public class XMLManagerDOM implements XMLManagerBackend {
 			return this.xpath.evaluate("./" + nodeName + "[" + nb + "]", ((Document) doc).getDocumentElement(),
 					XPathConstants.NODE);
 		} catch (XPathExpressionException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -176,7 +176,7 @@ public class XMLManagerDOM implements XMLManagerBackend {
 			return this.xpath.evaluate("./" + nodeName + "[@" + attribute + " = \'" + value + "\']",
 					((Document) doc).getDocumentElement(), XPathConstants.NODE);
 		} catch (XPathExpressionException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -219,6 +219,7 @@ public class XMLManagerDOM implements XMLManagerBackend {
 			nl = (NodeList) this.xpath.evaluate("./param", ((Document) doc).getDocumentElement(),
 					XPathConstants.NODESET);
 		} catch (XPathExpressionException e) {
+			e.printStackTrace();
 		}
 
 		Object[] oa = new Object[nl.getLength()];
@@ -286,7 +287,7 @@ public class XMLManagerDOM implements XMLManagerBackend {
 				node.getParentNode().removeChild(node);
 			}
 		} catch (Exception e2) {
-			// e2.printStackTrace();
+			e2.printStackTrace();
 		}
 	}
 
@@ -303,12 +304,12 @@ public class XMLManagerDOM implements XMLManagerBackend {
 		try {
 			result = new StreamResult(new File(URLDecoder.decode(document.getBaseURI(), "UTF-8").substring(6)));
 		} catch (UnsupportedEncodingException e1) {
-			// e1.printStackTrace();
+			e1.printStackTrace();
 		}
 		try {
 			this.transformer.transform(source, result);
 		} catch (TransformerException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

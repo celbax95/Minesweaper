@@ -58,6 +58,7 @@ public class ImageManager {
 				try {
 					img = ImageIO.read(is);
 				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 

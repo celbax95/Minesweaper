@@ -62,6 +62,7 @@ public class Cryptor {
 
 			return ret;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return def;
 		}
 	}
@@ -72,6 +73,7 @@ public class Cryptor {
 
 			return ret;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return def;
 		}
 	}
@@ -82,6 +84,7 @@ public class Cryptor {
 
 			return ret;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return def;
 		}
 	}
@@ -92,6 +95,7 @@ public class Cryptor {
 
 			return ret;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return def;
 		}
 	}
@@ -102,6 +106,7 @@ public class Cryptor {
 
 			return ret;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return def;
 		}
 	}
@@ -112,6 +117,7 @@ public class Cryptor {
 
 			return ret;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return def;
 		}
 	}
@@ -121,11 +127,11 @@ public class Cryptor {
 
 		String decryptedValue = "";
 
-		if (this.base64Encoding) {
-			value = this.decodeFromBase64(value);
-		}
-
 		try {
+			if (this.base64Encoding) {
+				value = this.decodeFromBase64(value);
+			}
+
 			Cipher c = Cipher.getInstance(ALGORITHM);
 
 			c.init(Cipher.DECRYPT_MODE, k);
@@ -195,6 +201,7 @@ public class Cryptor {
 
 				encryptedValue = new String(c.doFinal(tmp.getBytes()));
 			} catch (Exception e) {
+				e.printStackTrace();
 				return null;
 			}
 
@@ -204,7 +211,7 @@ public class Cryptor {
 				encoded = encryptedValue;
 			}
 
-		} while (!this.decrypt(encoded, value + "_", key).equals(value));
+		} while (this.scrambler != 0 && !this.decrypt(encoded, value + "_", key).equals(value));
 
 		return encoded;
 	}

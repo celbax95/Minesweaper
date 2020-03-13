@@ -69,6 +69,7 @@ public class Board {
 						nbOfBombsAround++;
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -91,6 +92,7 @@ public class Board {
 		try {
 			boardSize = new Point(board.length, board[0].length);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return;
 		}
 
@@ -225,6 +227,7 @@ public class Board {
 						this.uncoveredTiles++;
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -302,6 +305,7 @@ public class Board {
 						flagCount++;
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -449,6 +453,7 @@ public class Board {
 						this.uncoveredTiles++;
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
