@@ -69,7 +69,7 @@ public class Board {
 						nbOfBombsAround++;
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 				}
 			}
 		}
@@ -105,7 +105,12 @@ public class Board {
 
 			for (int x = 0; x < 3; x++) {
 				for (int y = 0; y < 3; y++) {
-					Tile tile = board[min.ix() + x][min.iy() + y];
+					Tile tile = null;
+					try {
+						tile = board[min.ix() + x][min.iy() + y];
+					} catch (ArrayIndexOutOfBoundsException e) {
+						continue;
+					}
 					if (tile.isBomb()) {
 						boolean replaced = false;
 
@@ -227,7 +232,6 @@ public class Board {
 						this.uncoveredTiles++;
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		}
@@ -305,7 +309,6 @@ public class Board {
 						flagCount++;
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		}
@@ -453,7 +456,6 @@ public class Board {
 						this.uncoveredTiles++;
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		}

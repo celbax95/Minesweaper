@@ -1,5 +1,7 @@
 package fr.state.menu;
 
+import fr.logger.Logger;
+
 public class MenuLoop implements Runnable {
 
 	private static final int LOOP_RATE = 10;// 32;
@@ -32,7 +34,7 @@ public class MenuLoop implements Runnable {
 
 					Thread.sleep(LOOP_RATE);
 				} catch (InterruptedException | NullPointerException e) {
-					e.printStackTrace();
+					Logger.inf("Boucle principale du state menu terminee");
 					Thread.currentThread().interrupt();
 				}
 			}

@@ -1,5 +1,7 @@
 package fr.state.game;
 
+import fr.logger.Logger;
+
 public class GameLoop implements Runnable {
 
 	private Thread loop;
@@ -30,7 +32,7 @@ public class GameLoop implements Runnable {
 
 					Thread.sleep(32);
 				} catch (InterruptedException | NullPointerException e) {
-					// e.printStackTrace();
+					Logger.inf("Boucle principale du state game terminee");
 					Thread.currentThread().interrupt();
 				}
 			}
