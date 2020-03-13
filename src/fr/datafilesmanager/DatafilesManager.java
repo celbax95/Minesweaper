@@ -112,6 +112,7 @@ public class DatafilesManager {
 
 			return doc;
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.err.println("La valeur \"" + name + "\" n'existe pas dans les fichiers connus.");
 			System.exit(0);
 		}

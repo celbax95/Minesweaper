@@ -70,7 +70,7 @@ public class ConfFiles {// String name, String path
 			try {
 				Files.setAttribute(p, "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
 			} catch (IOException e) {
-				// e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 
